@@ -1,6 +1,4 @@
-﻿using AdventOfCode.Commons;
-
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace _2015.Day06;
 

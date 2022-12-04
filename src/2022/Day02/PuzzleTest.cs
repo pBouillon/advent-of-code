@@ -1,6 +1,4 @@
-﻿using AdventOfCode.Commons;
-
-namespace _2022.Day02;
+﻿namespace _2022.Day02;
 
 public class PuzzleTest : TestEngine<Solver, IEnumerable<Round>, int>
 {

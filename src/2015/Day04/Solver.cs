@@ -1,6 +1,4 @@
-﻿using AdventOfCode.Commons;
-
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 
 namespace _2015.Day04;

@@ -1,6 +1,4 @@
-﻿using AdventOfCode.Commons;
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace _2022.Day02;
 

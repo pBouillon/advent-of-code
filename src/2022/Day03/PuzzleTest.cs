@@ -1,6 +1,4 @@
-﻿using AdventOfCode.Commons;
-
-namespace _2022.Day03;
+﻿namespace _2022.Day03;
 
 public class PuzzleTest : TestEngine<Solver, Rucksack[], int>
 {

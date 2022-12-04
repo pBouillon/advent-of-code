@@ -1,6 +1,4 @@
-﻿using AdventOfCode.Commons;
-
-namespace _2015.Day06;
+﻿namespace _2015.Day06;
 
 public class SolverTest : TestEngine<Solver, Command[], long>
 {

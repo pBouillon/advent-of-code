@@ -1,6 +1,4 @@
-﻿using AdventOfCode.Commons;
-
-namespace _2022.Day01;
+﻿namespace _2022.Day01;
 
 public class Solver : Solver<IEnumerable<long[]>, long>
 {

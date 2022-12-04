@@ -1,6 +1,4 @@
-﻿using AdventOfCode.Commons;
-
-namespace _2015.Day02;
+﻿namespace _2015.Day02;
 
 public record Dimension(int Length, int Width, int Height)
 {
