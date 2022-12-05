@@ -4,7 +4,7 @@ public record Coordinate(int X, int Y);
 
 public class Solver : Solver<string, int>
 {
-    protected override string InputPath => "Day03/input.txt";
+    public Solver() : base("Day03/input.txt") { }
 
     private static HashSet<Coordinate> GetVisitedHouses(string input)
     {
@@ -47,8 +47,6 @@ public class Solver : Solver<string, int>
         return visitedHouses.Count;
     }
 
-    public override string ReadInput(string inputPath)
-        => File
-            .ReadLines(inputPath)
-            .FirstOrDefault() ?? string.Empty;
+    public override string ParseInput(IEnumerable<string> input)
+        => input.First();
 }

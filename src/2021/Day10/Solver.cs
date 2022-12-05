@@ -2,8 +2,6 @@
 
 public class Solver : Solver<IEnumerable<string>, long>
 {
-    protected override string InputPath => "Day10/input.txt";
-
     private readonly IDictionary<char, char> _closingSymbols = new Dictionary<char, char>
     {
         ['('] = ')',
@@ -11,6 +9,8 @@ public class Solver : Solver<IEnumerable<string>, long>
         ['['] = ']',
         ['<'] = '>',
     };
+
+    public Solver() : base("Day10/input.txt") { }
 
     private char? GetCorruptingChar(string line)
     {
@@ -89,6 +89,6 @@ public class Solver : Solver<IEnumerable<string>, long>
         return scores[scores.Length / 2];
     }
 
-    public override IEnumerable<string> ReadInput(string inputPath)
-        => File.ReadLines(inputPath);
+    public override IEnumerable<string> ParseInput(IEnumerable<string> input)
+        => input;
 }

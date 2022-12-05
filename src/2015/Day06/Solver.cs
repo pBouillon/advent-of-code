@@ -15,7 +15,7 @@ public record Command(Status Status, Coordinate Source, Coordinate Target);
 
 public class Solver : Solver<Command[], long>
 {
-    protected override string InputPath => "Day06/input.txt";
+    public Solver() : base("Day06/input.txt") { }
 
     public override long PartOne(Command[] input)
     {
@@ -77,10 +77,8 @@ public class Solver : Solver<Command[], long>
             .Sum();
     }
 
-    public override Command[] ReadInput(string inputPath)
-        => File
-            .ReadLines(inputPath)
-            .Select(line =>
+    public override Command[] ParseInput(IEnumerable<string> input)
+        => input.Select(line =>
             {
                 var status = line.Contains("turn on")
                     ? Status.TurnOn

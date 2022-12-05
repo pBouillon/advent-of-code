@@ -6,7 +6,7 @@ public record Coordinate(int X, int Y);
 
 public class Solver : Solver<int[][], long>
 {
-    protected override string InputPath => "Day09/input.txt";
+    public Solver() : base("Day09/input.txt") { }
 
     private static IEnumerable<Coordinate> GetNeighbors(Coordinate coordinate, IReadOnlyList<int[]> grid)
     {
@@ -98,10 +98,8 @@ public class Solver : Solver<int[][], long>
             .Take(3)
             .Aggregate(1, (sum, size) => sum * size);
 
-    public override int[][] ReadInput(string inputPath)
-        => File
-            .ReadLines(inputPath)
-            .Select(line => line.Select(value => value.ToString())
+    public override int[][] ParseInput(IEnumerable<string> input)
+        => input.Select(line => line.Select(value => value.ToString())
                 .Select(int.Parse)
                 .ToArray())
             .ToArray();

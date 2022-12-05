@@ -2,7 +2,7 @@
 
 public class Solver : Solver<string[], int>
 {
-    protected override string InputPath => "Day03/input.txt";
+    public Solver() : base("Day03/input.txt") { }
 
     public override int PartOne(string[] input)
     {
@@ -56,6 +56,6 @@ public class Solver : Solver<string[], int>
         return Convert.ToInt32(oxygen, 2) * Convert.ToInt32(co2, 2);
     }
 
-    public override string[] ReadInput(string inputPath)
-        => File.ReadLines(inputPath).ToArray();
+    public override string[] ParseInput(IEnumerable<string> input)
+        => input.ToArray();
 }

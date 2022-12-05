@@ -2,7 +2,7 @@
 
 public class Solver : Solver<Dictionary<string, List<string>>, int>
 {
-    protected override string InputPath => "Day12/input.txt";
+    public Solver() : base("Day12/input.txt") { }
 
     private static bool IsBigCave(string cave) => cave.All(char.IsUpper);
 
@@ -64,11 +64,9 @@ public class Solver : Solver<Dictionary<string, List<string>>, int>
         return PathLength("start", new HashSet<string> { "start" });
     }
 
-    public override Dictionary<string, List<string>> ReadInput(string inputPath)
+    public override Dictionary<string, List<string>> ParseInput(IEnumerable<string> input)
     {
-        var paths = File
-            .ReadLines(inputPath)
-            .Select(line =>
+        var paths = input.Select(line =>
             {
                 var path = line.Split('-').ToArray();
                 return new { Source = path[0], Target = path[1] };

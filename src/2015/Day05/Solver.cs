@@ -2,7 +2,7 @@
 
 public class Solver : Solver<IEnumerable<string>, int>
 {
-    protected override string InputPath => "Day05/input.txt";
+    public Solver() : base("Day05/input.txt") { }
 
     private static bool ContainsAtLeastThreeVowels(string @string)
         => @string.Count("aeiou".Contains) > 2;
@@ -39,6 +39,6 @@ public class Solver : Solver<IEnumerable<string>, int>
             ContainsAnyLetterSeparatedByAnother(@string)
             && ContainsAnyRepeatingSequence(@string));
 
-    public override IEnumerable<string> ReadInput(string inputPath)
-        => File.ReadLines(inputPath);
+    public override IEnumerable<string> ParseInput(IEnumerable<string> input)
+        => input;
 }

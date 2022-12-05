@@ -2,7 +2,7 @@
 
 public class Solver : Solver<IEnumerable<long[]>, long>
 {
-    protected override string InputPath => "Day01/input.txt";
+    public Solver() : base("Day01/input.txt") { }
 
     public override long PartOne(IEnumerable<long[]> input)
         => input
@@ -16,12 +16,12 @@ public class Solver : Solver<IEnumerable<long[]>, long>
             .Take(3)
             .Sum();
 
-    public override IEnumerable<long[]> ReadInput(string inputPath)
+    public override IEnumerable<long[]> ParseInput(IEnumerable<string> input)
     {
         var calories = new Stack<long[]>();
 
         var carried = new Stack<long>();
-        foreach (var calory in File.ReadLines(inputPath))
+        foreach (var calory in input)
         {
             if (string.IsNullOrEmpty(calory))
             {

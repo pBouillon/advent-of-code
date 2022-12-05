@@ -7,15 +7,15 @@ namespace AdventOfCode.Commons;
 /// <summary>
 /// Test engine for the implemented <typeparamref name="TSolver"/>
 /// </summary>
-/// 
+///
 /// <typeparam name="TSolver">
 /// The <see cref="Solver{TInput, TResult}"/> to use
 /// </typeparam>
-/// 
+///
 /// <typeparam name="TInput">
 /// The type of the data used to solve the puzzle
 /// </typeparam>
-/// 
+///
 /// <typeparam name="TResult">
 /// The type of the result of the puzzle
 /// </typeparam>
@@ -32,7 +32,7 @@ public abstract class TestEngine<TSolver, TInput, TResult>
     {
         /// <summary>
         /// The data of the input mentionned in the example, in the same form as the
-        /// <see cref="Solver{TInput, TResult}.Input"/>
+        /// <see cref="Solver{TInput, TResult}.PuzzleInput"/>
         /// </summary>
         public TInput Input { get; init; } = default!;
 
@@ -47,6 +47,14 @@ public abstract class TestEngine<TSolver, TInput, TResult>
     /// </summary>
     public record Puzzle
     {
+        /// <summary>
+        /// If set to <c>true</c>, the tests for this puzzle will be skipped
+        /// </summary>
+        /// <remarks>
+        /// Default is <c>false</c>
+        /// </remarks>
+        public bool ShouldSkipTests { get; init; } = false;
+
         /// <summary>
         /// The <see cref="Example"/> to use to test <see cref="Solver{TInput, TResult}"/>
         /// </summary>
@@ -63,30 +71,39 @@ public abstract class TestEngine<TSolver, TInput, TResult>
     /// </summary>
     private readonly TSolver _solver;
 
-    protected TestEngine() 
-        => _solver = new TSolver();
+    protected TestEngine() => _solver = new TSolver();
 
     #region Part #1
 
     public abstract Puzzle PartOne { get; }
 
-    [Fact(DisplayName = "Part One - Example")]
+    [SkippableFact(DisplayName = "Part One - Example")]
     public void PartOneExampleTest()
     {
+        Skip.If(PartOne.ShouldSkipTests, "Puzzle.ShouldSkipTests has been set to true, test skipped");
+
+        // Arrange
         var input = PartOne.Example.Input;
 
+        // Act
         var result = _solver.PartOne(input);
 
+        // Assert
         result.Should().Be(PartOne.Example.Result);
     }
 
-    [Fact(DisplayName = "Part One - Solution")]
+    [SkippableFact(DisplayName = "Part One - Solution")]
     public void PartOneSolutionTest()
     {
-        var input = _solver.Input;
+        Skip.If(PartOne.ShouldSkipTests, "Puzzle.ShouldSkipTests has been set to true, test skipped");
 
-        var result = _solver.PartOne(input);
+        // Arrange
+        var input = _solver.PuzzleInput;
 
+        // Act
+        var result = _solver.PartOne(input.Value);
+
+        // Assert
         result.Should().Be(PartOne.Solution);
     }
 
@@ -96,23 +113,33 @@ public abstract class TestEngine<TSolver, TInput, TResult>
 
     public abstract Puzzle PartTwo { get; }
 
-    [Fact(DisplayName = "Part Two - Example")]
+    [SkippableFact(DisplayName = "Part Two - Example")]
     public void PartTwoExampleTest()
     {
+        Skip.If(PartTwo.ShouldSkipTests, "Puzzle.ShouldSkipTests has been set to true, test skipped");
+
+        // Arrange
         var input = PartTwo.Example.Input;
 
+        // Act
         var result = _solver.PartTwo(input);
 
+        // Assert
         result.Should().Be(PartTwo.Example.Result);
     }
 
-    [Fact(DisplayName = "Part Two - Solution")]
+    [SkippableFact(DisplayName = "Part Two - Solution")]
     public void PartTwoSolutionTest()
     {
-        var input = _solver.Input;
+        Skip.If(PartTwo.ShouldSkipTests, "Puzzle.ShouldSkipTests has been set to true, test skipped");
 
-        var result = _solver.PartTwo(input);
+        // Arrange
+        var input = _solver.PuzzleInput;
 
+        // Act
+        var result = _solver.PartTwo(input.Value);
+
+        // Assert
         result.Should().Be(PartTwo.Solution);
     }
 

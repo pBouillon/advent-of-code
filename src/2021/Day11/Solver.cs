@@ -11,8 +11,8 @@ public record Coordinate(int X, int Y)
 
 public class Solver : Solver<Dictionary<Coordinate, int>, int>
 {
-    protected override string InputPath => "Day11/input.txt";
-
+    public Solver() : base("Day11/input.txt") { }
+    
     public override int PartOne(Dictionary<Coordinate, int> input)
     {
         var flashes = 0;
@@ -95,11 +95,9 @@ public class Solver : Solver<Dictionary<Coordinate, int>, int>
         }
     }
 
-    public override Dictionary<Coordinate, int> ReadInput(string inputPath)
+    public override Dictionary<Coordinate, int> ParseInput(IEnumerable<string> input)
     {
-        var octopuses = File
-            .ReadLines(inputPath)
-            .ToArray();
+        var octopuses = input.ToArray();
 
         return new Dictionary<Coordinate, int>(Enumerable.Range(0, 10)
             .SelectMany(

@@ -70,7 +70,7 @@ public record Round(string Opponent, string You)
 
 public class Solver : Solver<IEnumerable<Round>, int>
 {
-    protected override string InputPath => "Day02/input.txt";
+    public Solver() : base("Day02/input.txt") { }
 
     public override int PartOne(IEnumerable<Round> input)
         => input.Select(round => round.Score).Sum();
@@ -78,10 +78,8 @@ public class Solver : Solver<IEnumerable<Round>, int>
     public override int PartTwo(IEnumerable<Round> input)
         => input.Select(round => round.RoundScoreWithOutcome()).Sum();
 
-    public override IEnumerable<Round> ReadInput(string inputPath)
-        => File
-            .ReadLines(inputPath)
-            .Select(line =>
+    public override IEnumerable<Round> ParseInput(IEnumerable<string> input)
+        => input.Select(line =>
             {
                 var parts = line.Split(' ');
                 return new Round(parts[0], parts[1]);

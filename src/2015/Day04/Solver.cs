@@ -5,9 +5,9 @@ namespace _2015.Day04;
 
 public class Solver : Solver<string, int>
 {
-    protected override string InputPath => "Day04/input.txt";
-
     private readonly HashAlgorithm _md5 = (HashAlgorithm)CryptoConfig.CreateFromName("MD5")!;
+
+    public Solver() : base("Day04/input.txt") { }
     
     // From: https://stackoverflow.com/a/11477466/6152689
     private string GetHash(string input)
@@ -38,8 +38,6 @@ public class Solver : Solver<string, int>
         return i;
     }
 
-    public override string ReadInput(string inputPath)
-        => File
-            .ReadLines(inputPath)
-            .First();
+    public override string ParseInput(IEnumerable<string> input)
+        => input.First();
 }

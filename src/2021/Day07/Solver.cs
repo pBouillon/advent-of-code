@@ -2,7 +2,7 @@
 
 public class Solver : Solver<int[], int>
 {
-    protected override string InputPath => "Day07/input.txt";
+    public Solver() : base("Day07/input.txt") { }
 
     public override int PartOne(int[] input)
         => Enumerable.Range(input.Min(), input.Max())
@@ -16,10 +16,8 @@ public class Solver : Solver<int[], int>
                 .Sum(consumption => consumption * (consumption + 1) / 2))
             .Min();
 
-    public override int[] ReadInput(string inputPath)
-        => File
-            .ReadLines(inputPath)
-            .First()
+    public override int[] ParseInput(IEnumerable<string> input)
+        => input.First()
             .Split(",")
             .Select(int.Parse)
             .ToArray();

@@ -29,7 +29,7 @@ public record Dimension(int Length, int Width, int Height)
 
 public class Solver : Solver<IEnumerable<Dimension>, int>
 {
-    protected override string InputPath => "Day02/input.txt";
+    public Solver() : base("Day02/input.txt") { }
 
     public override int PartOne(IEnumerable<Dimension> input) 
         => input.Sum(dimension => dimension.Volume + dimension.ComputeSmallestArea());
@@ -38,9 +38,8 @@ public class Solver : Solver<IEnumerable<Dimension>, int>
     public override int PartTwo(IEnumerable<Dimension> input)
         => input.Sum(dimension => dimension.CubicFeetVolume + dimension.ComputeSmallestPerimeter());
 
-    public override IEnumerable<Dimension> ReadInput(string inputPath)
-        => File.ReadLines(inputPath)
-            .Select(line =>
+    public override IEnumerable<Dimension> ParseInput(IEnumerable<string> input)
+        => input.Select(line =>
             {
                 var split = line
                     .Split('x')

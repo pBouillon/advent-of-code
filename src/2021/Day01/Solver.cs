@@ -2,7 +2,7 @@
 
 public class Solver : Solver<int[], int>
 {
-    protected override string InputPath => "Day01/input.txt";
+    public Solver() : base("Day01/input.txt") { }
 
     public override int PartOne(int[] input)
     {
@@ -25,9 +25,6 @@ public class Solver : Solver<int[], int>
         return PartOne(windowSums);
     }
 
-    public override int[] ReadInput(string inputPath)
-        => File
-            .ReadLines(inputPath)
-            .Select(int.Parse)
-            .ToArray();
+    public override int[] ParseInput(IEnumerable<string> input)
+        => input.Select(int.Parse).ToArray();
 }

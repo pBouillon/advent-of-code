@@ -18,7 +18,7 @@ public record Range(Coordinate Begin, Coordinate End)
 
 public class Solver : Solver<IEnumerable<Range>, int>
 {
-    protected override string InputPath => "Day05/input.txt";
+    public Solver() : base("Day05/input.txt") { }
 
     private static int CountIntersections(IEnumerable<Range> ranges)
     {
@@ -44,10 +44,8 @@ public class Solver : Solver<IEnumerable<Range>, int>
     public override int PartTwo(IEnumerable<Range> input)
         => CountIntersections(input);
 
-    public override IEnumerable<Range> ReadInput(string inputPath)
-        => File
-            .ReadLines(inputPath)
-            .Select(line => line
+    public override IEnumerable<Range> ParseInput(IEnumerable<string> input)
+        => input.Select(line => line
                 .Split(" -> ")
                 .ToList()
                 .Select(coordinate =>

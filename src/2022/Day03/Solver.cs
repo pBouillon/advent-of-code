@@ -36,11 +36,10 @@ public record ElfGroup
 
 public class Solver : Solver<Rucksack[], int>
 {
-    protected override string InputPath => "Day03/input.txt";
 
     private readonly Dictionary<char, int> _priority;
 
-    public Solver()
+    public Solver() : base("Day03/input.txt")
     {
         var lowercases = Enumerable.Range(0, 26)
             .ToDictionary(
@@ -77,8 +76,6 @@ public class Solver : Solver<Rucksack[], int>
             .Sum(badgeType => _priority[badgeType]);
     }
 
-    public override Rucksack[] ReadInput(string inputPath)
-        => File.ReadAllLines(inputPath)
-            .Select(content => new Rucksack(content))
-            .ToArray();
+    public override Rucksack[] ParseInput(IEnumerable<string> input)
+        => input.Select(content => new Rucksack(content)).ToArray();
 }

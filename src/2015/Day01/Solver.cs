@@ -2,7 +2,7 @@
 
 public class Solver : Solver<string, int>
 {
-    protected override string InputPath => "Day01/input.txt";
+    public Solver() : base("Day01/input.txt") { }
 
     public override int PartOne(string input)
     {
@@ -44,8 +44,6 @@ public class Solver : Solver<string, int>
         return Recursive(input);
     }
 
-    public override string ReadInput(string inputPath)
-        => File
-            .ReadLines(inputPath)
-            .FirstOrDefault() ?? string.Empty;
+    public override string ParseInput(IEnumerable<string> input)
+        => input.First();
 }

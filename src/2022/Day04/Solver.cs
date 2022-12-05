@@ -61,7 +61,7 @@ public record AssignementPair
 
 public class Solver : Solver<AssignementPair[], int>
 {
-    protected override string InputPath => "Day04/input.txt";
+    public Solver() : base("Day04/input.txt") { }
 
     public override int PartOne(AssignementPair[] input)
         => input.Count(pair => pair.IsEnglobing());
@@ -69,8 +69,6 @@ public class Solver : Solver<AssignementPair[], int>
     public override int PartTwo(AssignementPair[] input)
         => input.Count(pair => pair.HasOverlap());
 
-    public override AssignementPair[] ReadInput(string inputPath)
-        => File.ReadAllLines(inputPath)
-            .Select(pair => new AssignementPair(pair))
-            .ToArray();
+    public override AssignementPair[] ParseInput(IEnumerable<string> input)
+        => input.Select(pair => new AssignementPair(pair)).ToArray();
 }

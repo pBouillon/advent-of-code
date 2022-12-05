@@ -9,7 +9,7 @@ public record Coordinate(int X, int Y, int Aim = 0)
 
 public class Solver : Solver<IEnumerable<Command>, int>
 {
-    protected override string InputPath => "Day02/input.txt";
+    public Solver() : base("Day02/input.txt") { }
 
     public override int PartOne(IEnumerable<Command> input)
     {
@@ -45,10 +45,8 @@ public class Solver : Solver<IEnumerable<Command>, int>
         return position.X * position.Depth;
     }
 
-    public override IEnumerable<Command> ReadInput(string inputPath)
-        => File
-            .ReadLines(inputPath)
-            .Select(input =>
+    public override IEnumerable<Command> ParseInput(IEnumerable<string> input)
+        => input.Select(input =>
             {
                 var split = input.Split(' ');
                 return new Command(split[0], int.Parse(split[1]));

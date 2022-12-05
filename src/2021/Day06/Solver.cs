@@ -2,7 +2,7 @@
 
 public class Solver : Solver<Dictionary<int, long>, long>
 {
-    protected override string InputPath => "Day06/input.txt";
+    public Solver() : base("Day06/input.txt") { }
 
     private static Dictionary<int, long> GetNextGeneration(Dictionary<int, long> current)
     {
@@ -33,10 +33,8 @@ public class Solver : Solver<Dictionary<int, long>, long>
     public override long PartTwo(Dictionary<int, long> input)
         => GetPopulationAfterSomeTime(input, 256);
 
-    public override Dictionary<int, long> ReadInput(string inputPath)
-        => File
-            .ReadLines(inputPath)
-            .First()
+    public override Dictionary<int, long> ParseInput(IEnumerable<string> input)
+        => input.First()
             .Split(",")
             .Select(int.Parse)
             .GroupBy(internalTimer => internalTimer)

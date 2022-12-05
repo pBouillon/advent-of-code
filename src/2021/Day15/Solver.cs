@@ -14,7 +14,7 @@ public record Coordinate(int X, int Y)
 
 public class Solver : Solver<int[][], long>
 {
-    protected override string InputPath => "Day15/input.txt";
+    public Solver() : base("Day15/input.txt") { }
 
     public static int[][] GetExtendedMap(int[][] map, int magnitude = 5)
     {
@@ -99,8 +99,8 @@ public class Solver : Solver<int[][], long>
         return GetShortestPathCost(extended, start, goal);
     }
 
-    public override int[][] ReadInput(string inputPath)
-        => File.ReadLines(inputPath)
+    public override int[][] ParseInput(IEnumerable<string> input)
+        => input
             .Select(line => line.Select(x => x - '0').ToArray())
             .ToArray();
 }

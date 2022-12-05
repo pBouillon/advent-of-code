@@ -4,7 +4,7 @@ namespace _2021.Day04;
 
 public class Solver : Solver<(IEnumerable<int>, BingoGrid[]), int>
 {
-    protected override string InputPath => "Day04/input.txt";
+    public Solver() : base("Day04/input.txt") { }
 
     public override int PartOne((IEnumerable<int>, BingoGrid[]) input)
     {
@@ -54,12 +54,9 @@ public class Solver : Solver<(IEnumerable<int>, BingoGrid[]), int>
         return -1;
     }
 
-    public override (IEnumerable<int>, BingoGrid[]) ReadInput(string inputPath)
+    public override (IEnumerable<int>, BingoGrid[]) ParseInput(IEnumerable<string> input)
     {
-        var raw = File
-            .ReadLines(inputPath)
-            .Where(line => !string.IsNullOrWhiteSpace(line))
-            .ToList();
+        var raw = input.Where(line => !string.IsNullOrWhiteSpace(line)).ToList();
 
         var drawn = raw
             .First()

@@ -84,7 +84,7 @@ public class CraneOrdering
 
 public class Solver : Solver<CraneOrdering, string>
 {
-    protected override string InputPath => "Day05/input.txt";
+    public Solver() : base("Day05/input.txt") { }
 
     public override string PartOne(CraneOrdering input)
         => input.GetTopCratesAfterOperationsUsing("CrateMover 9000");
@@ -92,9 +92,9 @@ public class Solver : Solver<CraneOrdering, string>
     public override string PartTwo(CraneOrdering input)
         => input.GetTopCratesAfterOperationsUsing("CrateMover 9001");
 
-    public override CraneOrdering ReadInput(string inputPath)
+    public override CraneOrdering ParseInput(IEnumerable<string> input)
     {
-        var content = File.ReadAllLines(inputPath);
+        var content = input.ToList();
 
         var drawnStacks = content
             .TakeWhile(line => !string.IsNullOrWhiteSpace(line))

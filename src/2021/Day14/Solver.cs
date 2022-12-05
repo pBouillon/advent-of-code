@@ -2,7 +2,7 @@
 
 public class Solver : Solver<(string, Dictionary<string, string>), long>
 {
-    protected override string InputPath => "Day14/input.txt";
+    public Solver() : base("Day14/input.txt") { }
 
     private static Dictionary<string, long> GetPairsCount(string polymer)
         => Enumerable.Range(0, polymer.Length - 1)
@@ -84,12 +84,13 @@ public class Solver : Solver<(string, Dictionary<string, string>), long>
         return mostCommonCount - leastCommonCount;
     }
 
-    public override (string, Dictionary<string, string>) ReadInput(string inputPath)
+    public override (string, Dictionary<string, string>) ParseInput(IEnumerable<string> input)
     {
-        var polymer = File.ReadLines(inputPath).First();
+        var content = input.ToList();
 
-        var pairs = File.ReadLines(inputPath)
-            .Skip(1)
+        var polymer = content.First();
+
+        var pairs = content.Skip(1)
             .Where(line => !string.IsNullOrWhiteSpace(line))
             .Select(line =>
             {

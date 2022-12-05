@@ -4,8 +4,6 @@ public record Entry(IEnumerable<string> SignalPatterns, IEnumerable<string> Outp
 
 public class Solver : Solver<IEnumerable<Entry>, int>
 {
-    protected override string InputPath => "Day08/input.txt";
-
     private static Dictionary<string, string> GetSymbolsTable(string[] signalPatterns)
     {
         var uniqueSymbolSegmentsCount = new Dictionary<string, int>
@@ -62,6 +60,8 @@ public class Solver : Solver<IEnumerable<Entry>, int>
             kvp => kvp.Key);
     }
 
+    public Solver() : base("Day08/input.txt") { }
+
     public override int PartOne(IEnumerable<Entry> input)
         => input
             .Select(entry => entry.OutputValueDigits)
@@ -89,9 +89,8 @@ public class Solver : Solver<IEnumerable<Entry>, int>
             })
             .Sum(int.Parse);
 
-    public override IEnumerable<Entry> ReadInput(string inputPath)
-        => File.ReadLines(inputPath)
-            .Select(line =>
+    public override IEnumerable<Entry> ParseInput(IEnumerable<string> input)
+        => input.Select(line =>
             {
                 var parts = line.Split(" | ");
                 return new Entry(parts[0].Split(" "), parts[1].Split(" "));

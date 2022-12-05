@@ -21,7 +21,7 @@ public class Solver : Solver<(ISet<Coordinate>, IEnumerable<FoldingInstruction>)
         { "111100010010010010001111", "Z" },
     };
 
-    protected override string InputPath => "Day13/input.txt";
+    public Solver() : base("Day13/input.txt") { }
 
     private static ISet<Coordinate> GetPointsAfterFolds(ISet<Coordinate> points, IEnumerable<FoldingInstruction> instructions)
         => instructions.Aggregate(
@@ -86,11 +86,11 @@ public class Solver : Solver<(ISet<Coordinate>, IEnumerable<FoldingInstruction>)
                 (current, next) => current + InterpretLetterAt(next, points));
     }
 
-    public override (ISet<Coordinate>, IEnumerable<FoldingInstruction>) ReadInput(string inputPath)
+    public override (ISet<Coordinate>, IEnumerable<FoldingInstruction>) ParseInput(IEnumerable<string> input)
     {
-        var points = File
-            .ReadLines(inputPath)
-            .TakeWhile(line => !string.IsNullOrWhiteSpace(line))
+        var content = input.ToList();
+
+        var points = content.TakeWhile(line => !string.IsNullOrWhiteSpace(line))
             .Select(line =>
             {
                 var split = line
@@ -102,9 +102,7 @@ public class Solver : Solver<(ISet<Coordinate>, IEnumerable<FoldingInstruction>)
             })
             .ToHashSet();
 
-        var instructions = File
-            .ReadLines(inputPath)
-            .SkipWhile(line => string.IsNullOrEmpty(line) || char.IsDigit(line[0]))
+        var instructions = content.SkipWhile(line => string.IsNullOrEmpty(line) || char.IsDigit(line[0]))
             .Select(line =>
             {
                 var matches = Regex
