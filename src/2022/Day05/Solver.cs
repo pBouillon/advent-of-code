@@ -13,53 +13,28 @@ public partial record CraneOperation(int Count, int From, int To)
 
 public class CratesStack
 {
-    private readonly IDictionary<int, Stack<char>> _stacks = new Dictionary<int, Stack<char>>();
+    private readonly IDictionary<int, string> _stacks = new Dictionary<int, string>();
 
-    public CratesStack(IDictionary<int, Stack<char>> stacks)
+    public CratesStack(IDictionary<int, string> stacks)
         => _stacks = stacks;
 
-    public void Apply(CraneOperation operation, string crateModel)
+    public void Apply(CraneOperation operation, string craneModel)
     {
         var (count, from, to) = operation;
 
-        void CrateMover9000Move()
+        var moved = _stacks[from][^count..];
+
+        if (craneModel == "CrateMover 9000")
         {
-            for (var i = 0; i < count; ++i)
-            {
-                var moved = _stacks[from].Pop();
-                _stacks[to].Push(moved);
-            }
+            moved = new string(moved.Reverse().ToArray());
         }
 
-        void CrateMover9001Move()
-        {
-            var crates = new Stack<char>();
-
-            for (var i = 0; i < count; ++i)
-            {
-                var moved = _stacks[from].Pop();
-                crates.Push(moved);
-            }
-
-            while (crates.Count > 0)
-            {
-                var moved = crates.Pop();
-                _stacks[to].Push(moved);
-            }
-        }
-
-        Action move = crateModel switch
-        {
-            "CrateMover 9000" => CrateMover9000Move,
-            "CrateMover 9001" => CrateMover9001Move,
-            _ => throw new UnreachableException()
-        };
-
-        move();
+        _stacks[to] += moved;
+        _stacks[from] = _stacks[from][..^count];
     }
 
     public IEnumerable<char> GetTopCrateOnEachStack()
-        => _stacks.Select(kvp => kvp.Value.Peek());
+        => _stacks.Values.Select(crates => crates[^1]);
 }
 
 public class CraneOrdering
@@ -101,7 +76,7 @@ public class Solver : Solver<CraneOrdering, string>
             .Reverse()
             .ToArray();
 
-        IEnumerable<char> GetCratesOnColumn(int column)
+        string GetCratesOnColumn(int column)
         {
             // Column is 1-based
             var indice = column - 1;
@@ -114,18 +89,9 @@ public class Solver : Solver<CraneOrdering, string>
                 .Skip(1)
                 // Retrieve the crates letter
                 .Aggregate(
-                    new Queue<char>(),
-                    (crates, row) =>
-                    {
-                        var crate = row[index];
-
-                        if (crate != ' ')
-                        {
-                            crates.Enqueue(row[index]);
-                        }
-
-                        return crates;
-                    });
+                    string.Empty,
+                    (crates, row) => crates + row[index],
+                    crates => crates.TrimEnd());
         }
 
         var columnCount = drawnStacks.First().Count(char.IsDigit);
@@ -138,7 +104,7 @@ public class Solver : Solver<CraneOrdering, string>
             })
             .ToDictionary(
                 entry => entry.Index,
-                entry => new Stack<char>(entry.Crates));
+                entry => entry.Crates);
 
         var operations = content
             // Skip the crates stacks

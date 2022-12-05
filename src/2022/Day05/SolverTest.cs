@@ -16,11 +16,11 @@ public class SolverTest : TestEngine<Solver, CraneOrdering, string>
 #pragma warning restore IDE0051 // Remove unused private members
 ;
 
-    private readonly CratesStack _stacks = new(new Dictionary<int, Stack<char>>()
+    private readonly CratesStack _stacks = new(new Dictionary<int, string>()
     {
-        { 1, new Stack<char>(new[] { 'Z', 'N' }) },
-        { 2, new Stack<char>(new[] { 'M', 'C', 'D' }) },
-        { 3, new Stack<char>(new[] { 'P' }) },
+        { 1, "ZN" },
+        { 2, "MCD" },
+        { 3, "P" },
     });
 
     private readonly CraneOperation[] _operations =
