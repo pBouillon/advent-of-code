@@ -1,14 +1,10 @@
-﻿using System.Diagnostics;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace _2022.Day05;
 
 public partial record CraneOperation(int Count, int From, int To)
 {
-    [GeneratedRegex("move (\\d+) from (\\d+) to (\\d+)", RegexOptions.Compiled)]
-    private static partial Regex OperationExtractionRegexp();
-
-    public static readonly Regex ParsingRegexp = OperationExtractionRegexp();
+    public static readonly Regex ParsingRegexp = new("move (\\d+) from (\\d+) to (\\d+)", RegexOptions.Compiled);
 }
 
 public class CratesStack
