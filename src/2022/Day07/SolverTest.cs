@@ -1,14 +1,14 @@
 ﻿namespace _2022.Day07;
 
-
 public class SolverTest : TestEngine<Solver, Directory, long>
 {
     private readonly Dictionary<string, Directory> _directories = new()
     {
-        { 
-            "/", 
-            new("/")
+        {
+            "/",
+            new Directory
             {
+                Name = "/",
                 Files = new()
                 {
                     new File("b.txt", 14848514),
@@ -18,8 +18,9 @@ public class SolverTest : TestEngine<Solver, Directory, long>
         },
         { 
             "a", 
-            new("a")
+            new Directory
             {
+                Name = "a",
                 Files = new()
                 {
                     new File("f", 29116),
@@ -30,8 +31,9 @@ public class SolverTest : TestEngine<Solver, Directory, long>
         },
         { 
             "e", 
-            new("e")
+            new Directory
             {
+                Name = "e",
                 Files = new()
                 {
                   new File("i", 584),
@@ -40,8 +42,9 @@ public class SolverTest : TestEngine<Solver, Directory, long>
         },
         { 
             "d", 
-            new("d")
+            new Directory
             {
+                Name = "d",
                 Files = new()
                 {
                     new File("j", 4060174),
@@ -76,27 +79,21 @@ public class SolverTest : TestEngine<Solver, Directory, long>
 
     public override Puzzle PartOne => new()
     {
-        // TODO - WiP
-        ShouldSkipTests = true,
-
         Example = new()
         {
             Input = GetInput(),
             Result = 95437,
         },
-        Solution = 1159091,  // Not: 801867 or 1159091
+        Solution = 1243729,
     };
 
     public override Puzzle PartTwo => new()
     {
-        // TODO - WiP
-        ShouldSkipTests = true,
-
         Example = new()
         {
             Input = GetInput(),
-            Result = 0,
+            Result = 24933642,
         },
-        Solution = 0,
+        Solution = 4443914,
     };
 }
