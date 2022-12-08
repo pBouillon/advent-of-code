@@ -14,6 +14,25 @@ public static class MatrixExtensions
 
     public static bool AreSmallerThan(this IEnumerable<int> trees, int current)
         => trees.All(tree => tree < current);
+
+    public static int VisibleFrom(this IEnumerable<int> trees, int current)
+    {
+        if (!trees.Any()) return 0;
+
+        var visibleTreesCount = 0;
+
+        foreach (var tree in trees)
+        {
+            ++visibleTreesCount;
+
+            if (tree >= current)
+            {
+                return visibleTreesCount;
+            }
+        }
+
+        return visibleTreesCount;
+    }
 }
 
 public class Solver : Solver<int[,], int>
@@ -76,7 +95,36 @@ public class Solver : Solver<int[,], int>
 
     public override int PartTwo(int[,] input)
     {
-        throw new NotImplementedException();
+        var highestScenicScore = 0;
+
+        var forestWidth = input.GetLength(0);
+        for (var i = 0; i < forestWidth; ++i)
+        {
+            for (var j = 0; j < forestWidth; ++j)
+            {
+                var column = input.GetColumn(j);
+                var row = input.GetRow(i);
+
+                var trees = new
+                {
+                    OnTop = column[..i].Reverse().ToArray(),
+                    OnBottom = column[(i + 1)..],
+                    OnRight = row[(j + 1)..],
+                    OnLeft = row[..j].Reverse().ToArray(),
+                };
+
+                var tree = input[i, j];
+
+                var scenicScore = trees.OnTop.VisibleFrom(tree)
+                    * trees.OnBottom.VisibleFrom(tree)
+                    * trees.OnRight.VisibleFrom(tree)
+                    * trees.OnLeft.VisibleFrom(tree);
+
+                highestScenicScore = Math.Max(scenicScore, highestScenicScore);
+            }
+        }
+
+        return highestScenicScore;
     }
 
     public override int[,] ParseInput(IEnumerable<string> input)

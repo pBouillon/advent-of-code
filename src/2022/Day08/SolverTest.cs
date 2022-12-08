@@ -18,17 +18,16 @@ public class SolverTest : TestEngine<Solver, int[,], int>
             Input = _forest,
             Result = 21,
         },
-        Solution = 1880,  // Not 1684 < x < 1880
+        Solution = 1851,
     };
 
     public override Puzzle PartTwo => new()
     {
-        ShouldSkipTests = true,
         Example = new()
         {
             Input = _forest,
-            Result = 21,
+            Result = 8,
         },
-        Solution = 1851,
+        Solution = 574080,
     };
 }
