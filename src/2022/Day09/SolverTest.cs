@@ -21,7 +21,7 @@ public class SolverTest : TestEngine<Solver, IEnumerable<Motion>, int>
             Input = _motions,
             Result = 13,
         },
-        Solution = 0,
+        Solution = 5930,
     };
 
     public override Puzzle PartTwo => new()
