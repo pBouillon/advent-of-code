@@ -26,12 +26,11 @@ public class SolverTest : TestEngine<Solver, IEnumerable<Motion>, int>
 
     public override Puzzle PartTwo => new()
     {
-        ShouldSkipTests = true,
         Example = new()
         {
             Input = _motions,
-            Result = 0,
+            Result = 1,
         },
-        Solution = 0,
+        Solution = 2443,
     };
 }

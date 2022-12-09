@@ -14,7 +14,7 @@ public record Motion(Direction Direction, int Times);
 
 public record Coordinate(int X, int Y)
 {
-    public static Coordinate Origin = new Coordinate(0, 0);
+    public static readonly Coordinate Origin = new(0, 0);
 
     public Coordinate MovedToThe(Direction direction)
         => direction switch
@@ -25,34 +25,23 @@ public record Coordinate(int X, int Y)
             Direction.Down => this with { Y = Y - 1 },
             _ => throw new UnreachableException(),
         };
-}
 
-public record Rope
-{
-    private readonly HashSet<Coordinate> _visitedFromTail = new() { Coordinate.Origin };
-
-    public Coordinate Head { get; private set; } = Coordinate.Origin;
-
-    public Coordinate Tail { get; private set; } = Coordinate.Origin;
-
-    public int VisitedCoordintatesFromTailCount => _visitedFromTail.Count;
-
-    private IEnumerable<Direction> TailShouldFollow()
+    public IEnumerable<Direction> MovementsToReach(Coordinate target)
     {
         var directions = new List<Direction>();
 
-        var distanceToX = Head.X - Tail.X;
-        var distanceToY = Head.Y - Tail.Y;
+        var distanceToX = target.X - X;
+        var distanceToY = target.Y - Y;
 
         if (distanceToX < -1)
         {
             directions.Add(Direction.Left);
-            
+
             if (distanceToY < 0) directions.Add(Direction.Down);
             if (distanceToY > 0) directions.Add(Direction.Up);
         }
 
-        if (distanceToX > 1)
+        else if (distanceToX > 1)
         {
             directions.Add(Direction.Right);
 
@@ -60,7 +49,7 @@ public record Rope
             if (distanceToY > 0) directions.Add(Direction.Up);
         }
 
-        if (distanceToY < -1)
+        else if (distanceToY < -1)
         {
             directions.Add(Direction.Down);
 
@@ -68,7 +57,7 @@ public record Rope
             if (distanceToX > 0) directions.Add(Direction.Right);
         }
 
-        if (distanceToY > 1)
+        else if (distanceToY > 1)
         {
             directions.Add(Direction.Up);
 
@@ -78,21 +67,62 @@ public record Rope
 
         return directions;
     }
+}
+
+public class Knot
+{
+    private readonly HashSet<Coordinate> _visited = new() { Coordinate.Origin };
+
+    public Coordinate Coordinate { get; private set; } = Coordinate.Origin;
+
+    public int VisitedCoordinatesCount => _visited.Count;
+
+    public IEnumerable<Direction> MovementsToReach(Knot target)
+        => Coordinate.MovementsToReach(target.Coordinate);
+
+    public void MoveTo(IEnumerable<Direction> directions)
+    {
+        foreach (var direction in directions)
+        {
+            Coordinate = Coordinate.MovedToThe(direction);
+        }
+
+        _visited.Add(Coordinate);
+    }
+}
+
+public class Rope
+{
+    private readonly Knot[] _knots;
+
+    public Knot Head => _knots[0];
+
+    public Knot Tail => _knots[^1];
+
+    public Rope(int knotsCount)
+        => _knots = Enumerable.Range(0, knotsCount)
+            .Select(_ => new Knot())
+            .ToArray();
 
     public void Apply(Motion motion)
     {
         for (var i = 0; i < motion.Times; ++i)
         {
-            Head = Head.MovedToThe(motion.Direction);
+            Head.MoveTo(new[] { motion.Direction });
+            ApplyInertia();
+        }
+    }
 
-            var directions = TailShouldFollow();
+    private void ApplyInertia()
+    {
+        for (var j = 1; j < _knots.Length; ++j)
+        {
+            var target = _knots[j - 1];
+            var source = _knots[j];
 
-            foreach (var direction in directions)
-            {
-                Tail = Tail.MovedToThe(direction);
-            }
+            var directions = source.MovementsToReach(target);
 
-            _visitedFromTail.Add(Tail);
+            source.MoveTo(directions);
         }
     }
 }
@@ -103,19 +133,26 @@ public class Solver : Solver<IEnumerable<Motion>, int>
 
     public override int PartOne(IEnumerable<Motion> input)
     {
-        var rope = new Rope();
+        var rope = new Rope(knotsCount: 2);
 
         foreach (var motion in input)
         {
             rope.Apply(motion);
         }
 
-        return rope.VisitedCoordintatesFromTailCount;
+        return rope.Tail.VisitedCoordinatesCount;
     }
 
     public override int PartTwo(IEnumerable<Motion> input)
     {
-        throw new NotImplementedException();
+        var rope = new Rope(knotsCount: 10);
+
+        foreach (var motion in input)
+        {
+            rope.Apply(motion);
+        }
+
+        return rope.Tail.VisitedCoordinatesCount;
     }
 
     public override IEnumerable<Motion> ParseInput(IEnumerable<string> input)
