@@ -30,39 +30,50 @@ public record Coordinate(int X, int Y)
     {
         var directions = new List<Direction>();
 
-        var distanceToX = target.X - X;
-        var distanceToY = target.Y - Y;
+        var distanceTo = new
+        {
+            X = target.X - X,
+            Y = target.Y - Y,
+        };
 
-        if (distanceToX < -1)
+        if (distanceTo.X < -1)
         {
             directions.Add(Direction.Left);
 
-            if (distanceToY < 0) directions.Add(Direction.Down);
-            if (distanceToY > 0) directions.Add(Direction.Up);
+            if (distanceTo.Y < 0) directions.Add(Direction.Down);
+            if (distanceTo.Y > 0) directions.Add(Direction.Up);
+
+            return directions;
         }
 
-        else if (distanceToX > 1)
+        if (distanceTo.X > 1)
         {
             directions.Add(Direction.Right);
 
-            if (distanceToY < 0) directions.Add(Direction.Down);
-            if (distanceToY > 0) directions.Add(Direction.Up);
+            if (distanceTo.Y < 0) directions.Add(Direction.Down);
+            if (distanceTo.Y > 0) directions.Add(Direction.Up);
+
+            return directions;
         }
 
-        else if (distanceToY < -1)
+        if (distanceTo.Y < -1)
         {
             directions.Add(Direction.Down);
 
-            if (distanceToX < 0) directions.Add(Direction.Left);
-            if (distanceToX > 0) directions.Add(Direction.Right);
+            if (distanceTo.X < 0) directions.Add(Direction.Left);
+            if (distanceTo.X > 0) directions.Add(Direction.Right);
+
+            return directions;
         }
 
-        else if (distanceToY > 1)
+        if (distanceTo.Y > 1)
         {
             directions.Add(Direction.Up);
 
-            if (distanceToX < 0) directions.Add(Direction.Left);
-            if (distanceToX > 0) directions.Add(Direction.Right);
+            if (distanceTo.X < 0) directions.Add(Direction.Left);
+            if (distanceTo.X > 0) directions.Add(Direction.Right);
+
+            return directions;
         }
 
         return directions;
