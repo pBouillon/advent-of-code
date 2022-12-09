@@ -104,6 +104,9 @@ public class Rope
             .Select(_ => new Knot())
             .ToArray();
 
+    public void Apply(IEnumerable<Motion> motions)
+        => motions.ToList().ForEach(Apply);
+
     public void Apply(Motion motion)
     {
         for (var i = 0; i < motion.Times; ++i)
@@ -134,11 +137,7 @@ public class Solver : Solver<IEnumerable<Motion>, int>
     public override int PartOne(IEnumerable<Motion> input)
     {
         var rope = new Rope(knotsCount: 2);
-
-        foreach (var motion in input)
-        {
-            rope.Apply(motion);
-        }
+        rope.Apply(input);
 
         return rope.Tail.VisitedCoordinatesCount;
     }
@@ -146,11 +145,7 @@ public class Solver : Solver<IEnumerable<Motion>, int>
     public override int PartTwo(IEnumerable<Motion> input)
     {
         var rope = new Rope(knotsCount: 10);
-
-        foreach (var motion in input)
-        {
-            rope.Apply(motion);
-        }
+        rope.Apply(input);
 
         return rope.Tail.VisitedCoordinatesCount;
     }
