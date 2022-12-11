@@ -2,15 +2,8 @@
 
 namespace _2022.Day10;
 
-public class SolverTest : TestEngine<Solver, IEnumerable<Instruction>, int>
+public class SolverTest : TestEngine<Solver, IEnumerable<Instruction>, string>
 {
-    private static readonly IEnumerable<Instruction> _instructions2 = new Instruction[]
-    {
-        new NoopInstruction(),
-        new AddxInstruction(3),
-        new AddxInstruction(-5),
-    };
-
     private static readonly IEnumerable<Instruction> _instructions = new Instruction[]
     {
         new AddxInstruction(15),
@@ -166,10 +159,20 @@ public class SolverTest : TestEngine<Solver, IEnumerable<Instruction>, int>
         Example = new()
         {
             Input = Solver.WithCycles(_instructions),
-            Result = 13140,
+            Result = "13140",
         },
-        Solution = 13760,
+        Solution = "13760",
     };
 
-    public override Puzzle PartTwo => throw new NotImplementedException();
+    public override Puzzle PartTwo => new()
+    {
+        Example = new()
+        {
+            Input = Solver.WithCycles(_instructions),
+            Result = "##..##..##..##..##..##..##..##..##..##..\r\n###...###...###...###...###...###...###.\r\n####....####....####....####....####....\r\n#####.....#####.....#####.....#####.....\r\n######......######......######......####\r\n#######.......#######.......#######.....",
+        },
+
+        // Displays the letters "RFKZCPEF"
+        Solution = "###..####.#..#.####..##..###..####.####.\r\n#..#.#....#.#.....#.#..#.#..#.#....#....\r\n#..#.###..##.....#..#....#..#.###..###..\r\n###..#....#.#...#...#....###..#....#....\r\n#.#..#....#.#..#....#..#.#....#....#....\r\n#..#.#....#..#.####..##..#....####.#....",
+    };
 }
