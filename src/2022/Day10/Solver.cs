@@ -95,7 +95,7 @@ public class Device
     }
 
     public string GetScreenDisplay()
-        => string.Join(Environment.NewLine, _crt.GetCurrentLines());
+        => string.Join("\n", _crt.GetCurrentLines());
 }
 
 public class Solver : Solver<IEnumerable<Instruction>, string>
