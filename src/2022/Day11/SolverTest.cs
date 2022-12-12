@@ -49,14 +49,14 @@ public class SolverTest : TestEngine<Solver, Monkeys, long>
 
     public override Puzzle PartTwo => new()
     {
-        // Still yet to be done
-        ShouldSkipTests= true,
+        // WiP
+        ShouldSkipTests = true,
 
         Example = new()
         {
             Input = GetMonkeys(),
-            Result = 10605,
+            Result = 2713310158L,
         },
-        Solution = 62491,
+        Solution = 0,
     };
 }

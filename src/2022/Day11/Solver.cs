@@ -27,7 +27,7 @@ public class Monkey
     public void Receive(Item item)
         => _items.Enqueue(item);
 
-    public Queue<Throw> PlayTurn()
+    public Queue<Throw> PlayTurn(bool canBeBored = true)
     {
         var thrown = new Queue<Throw>();
 
@@ -36,7 +36,11 @@ public class Monkey
             var item = _items.Dequeue();
 
             item = Inspect(item);
-            item = GetBoredOf(item);
+
+            if (canBeBored)
+            {
+                item = GetBoredOf(item);
+            }
 
             var @throw = new Throw(item, _throw(item));
 
@@ -61,6 +65,10 @@ public class Monkey
         {
             WorryLevel = (long)Math.Floor(item.WorryLevel / 3d),
         };
+
+    public override string ToString()
+        => $"Inspected: {InspectedItems} - Items: "
+            + string.Join(", ", _items.Select(i => i.WorryLevel));
 }
 
 public class Monkeys
@@ -79,16 +87,16 @@ public class Monkeys
     public void Add(int id, Monkey monkey)
         => _monkeys.Add(id, monkey);
 
-    public void PlayRounds(int count)
+    public void PlayRounds(int count, bool canBeBored = true)
         => Enumerable.Range(0, count)
             .ToList()
-            .ForEach(_ => PlayRound());
+            .ForEach(_ => PlayRound(canBeBored));
 
-    public void PlayRound()
+    public void PlayRound(bool canBeBored = true)
     {
         foreach (var (_, monkey) in _monkeys)
         {
-            var thrown = monkey.PlayTurn();
+            var thrown = monkey.PlayTurn(canBeBored);
 
             foreach (var (item, to) in thrown)
             {
@@ -110,7 +118,8 @@ public class Solver : Solver<Monkeys, long>
 
     public override long PartTwo(Monkeys monkeys)
     {
-        throw new NotImplementedException();
+        monkeys.PlayRounds(count: 10_000, canBeBored: false);
+        return monkeys.MonkeyBusiness;
     }
 
     public override Monkeys ParseInput(IEnumerable<string> input)
