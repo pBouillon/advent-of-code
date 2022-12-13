@@ -1,6 +1,6 @@
 ﻿namespace _2022.Day11;
 
-public class SolverTest : TestEngine<Solver, Monkeys, long>
+public class SolverTest : TestEngine<Solver, Monkeys, ulong>
 {
     private readonly Monkey[] _monkeys = new[]
     {
@@ -42,9 +42,9 @@ public class SolverTest : TestEngine<Solver, Monkeys, long>
         Example = new()
         {
             Input = GetMonkeys(),
-            Result = 10605,
+            Result = 10605uL,
         },
-        Solution = 62491,
+        Solution = 62491uL,
     };
 
     public override Puzzle PartTwo => new()
@@ -55,7 +55,7 @@ public class SolverTest : TestEngine<Solver, Monkeys, long>
         Example = new()
         {
             Input = GetMonkeys(),
-            Result = 2713310158L,
+            Result = 2713310158uL,
         },
         Solution = 0,
     };

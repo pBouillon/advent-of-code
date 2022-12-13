@@ -1,22 +1,23 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace _2022.Day11;
 
-public record Item(long WorryLevel);
+public record Item(ulong WorryLevel);
 
 public record Throw(Item Item, int To);
 
 public class Monkey
 {
-    public int InspectedItems { get; private set; } = 0;
+    public ulong InspectedItems { get; private set; } = 0;
 
     private readonly Queue<Item> _items = new();
 
-    private readonly Func<Item, long> _inspect;
+    private readonly Func<Item, ulong> _inspect;
 
     private readonly Func<Item, int> _throw;
 
-    public Monkey(IEnumerable<Item> items, Func<Item, long> inspect, Func<Item, int> @throw)
+    public Monkey(IEnumerable<Item> items, Func<Item, ulong> inspect, Func<Item, int> @throw)
     {
         _items = new Queue<Item>(items);
 
@@ -63,7 +64,7 @@ public class Monkey
     private static Item GetBoredOf(Item item)
         => item with
         {
-            WorryLevel = (long)Math.Floor(item.WorryLevel / 3d),
+            WorryLevel = (ulong)Math.Floor(item.WorryLevel / 3d),
         };
 
     public override string ToString()
@@ -75,13 +76,13 @@ public class Monkeys
 {
     private readonly Dictionary<int, Monkey> _monkeys = new();
 
-    public long MonkeyBusiness
+    public ulong MonkeyBusiness
         => _monkeys.Values
             .Select(monkey => monkey.InspectedItems)
             .OrderByDescending(inspectedItems => inspectedItems)
             .Take(2)
             .Aggregate(
-                1L,
+                1uL,
                 (count, inspectedItems) => count * inspectedItems);
 
     public void Add(int id, Monkey monkey)
@@ -106,17 +107,17 @@ public class Monkeys
     }
 }
 
-public class Solver : Solver<Monkeys, long>
+public class Solver : Solver<Monkeys, ulong>
 {
     public Solver() : base("Day11/input.txt") { }
 
-    public override long PartOne(Monkeys monkeys)
+    public override ulong PartOne(Monkeys monkeys)
     {
         monkeys.PlayRounds(count: 20);
         return monkeys.MonkeyBusiness;
     }
 
-    public override long PartTwo(Monkeys monkeys)
+    public override ulong PartTwo(Monkeys monkeys)
     {
         monkeys.PlayRounds(count: 10_000, canBeBored: false);
         return monkeys.MonkeyBusiness;
@@ -136,34 +137,52 @@ public class Solver : Solver<Monkeys, long>
             .GroupBy(
                 x => x.Key,
                 x => x.Value,
-                (_, group) => group);
+                (_, group) => group.ToArray())
+            .ToArray();
 
         static IEnumerable<long> GetNumbersIn(string line)
             => Regex.Matches(line, @"\d+")
                 .OfType<Match>()
                 .Select(m => long.Parse(m.Value));
 
-        static (int, Monkey) CreateMonkeyFrom(IEnumerable<string> definition)
-        {
-            var receipe = definition.ToArray();
+        // Compute the divider
+        static int MonkeyDivider(string[] definition)
+            => (int)GetNumbersIn(definition[3]).First();
 
+        var divider = monkeyDefinitions.Select(MonkeyDivider)
+            .Aggregate(
+                1uL, 
+                (divider, monkeyDivider) => divider * (ulong)monkeyDivider);
+
+        // Create the monkeys from the definition and the divider
+        static (int, Monkey) CreateMonkeyFrom(string[] definition, ulong divider)
+        {
             // Items
-            var startingItems = GetNumbersIn(receipe[1])
-                .Select(worryLevel => new Item(worryLevel));
+            var startingItems = GetNumbersIn(definition[1])
+                .Select(worryLevel => new Item((ulong)worryLevel));
+
+            // Throw
+            var divisibleBy = (int)GetNumbersIn(definition[3]).First();
+            var ifTrue = (int)GetNumbersIn(definition[4]).First();
+            var ifFalse = (int)GetNumbersIn(definition[5]).First();
+
+            Func<Item, int> @throw = (item) => item.WorryLevel % (ulong)divisibleBy == 0
+                ? ifTrue
+                : ifFalse;
 
             // Inspection
-            var operation = receipe[2].Split(" = ")[1];
+            var operation = definition[2].Split(" = ")[1];
             var parsed = operation.Split(" ");
 
-            Func<Item, long> inspect = (item) =>
+            Func<Item, ulong> inspect = (item) =>
             {
                 var left = parsed[0] == "old"
                     ? item.WorryLevel
-                    : long.Parse(parsed[0]);
+                    : ulong.Parse(parsed[0]);
 
                 var right = parsed[2] == "old"
                     ? item.WorryLevel
-                    : long.Parse(parsed[2]);
+                    : ulong.Parse(parsed[2]);
 
                 return parsed[1] switch
                 {
@@ -172,26 +191,17 @@ public class Solver : Solver<Monkeys, long>
                     "*" => left * right,
                     "/" => left / right,
                     _ => throw new ArgumentException(),
-                };
+                } % divider;
             };
 
-            // Throw
-            var divisibleBy = (int)GetNumbersIn(receipe[3]).First();
-            var ifTrue = (int)GetNumbersIn(receipe[4]).First();
-            var ifFalse = (int)GetNumbersIn(receipe[5]).First();
-
-            Func<Item, int> @throw = (item) => item.WorryLevel % divisibleBy == 0 
-                ? ifTrue
-                : ifFalse;
-
             // Result
-            var id = (int)GetNumbersIn(receipe[0]).First();
+            var id = (int)GetNumbersIn(definition[0]).First();
             var monkey = new Monkey(startingItems, inspect, @throw);
 
             return (id, monkey);
         }
 
-        var createdMonkeys = monkeyDefinitions.Select(CreateMonkeyFrom);
+        var createdMonkeys = monkeyDefinitions.Select(definition => CreateMonkeyFrom(definition, divider));
 
         var monkeys = new Monkeys();
 
