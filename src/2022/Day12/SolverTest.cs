@@ -21,8 +21,16 @@ public class SolverTest : TestEngine<Solver, ElevationMap, int>
             Input = Map,
             Result = 31,
         },
-        Solution = 0,
+        Solution = 425,
     };
 
-    public override Puzzle PartTwo => throw new NotImplementedException();
+    public override Puzzle PartTwo => new()
+    {
+        Example = new()
+        {
+            Input = Map,
+            Result = 29,
+        },
+        Solution = 418,
+    };
 }
