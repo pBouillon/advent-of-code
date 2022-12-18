@@ -5,11 +5,9 @@ namespace _2022.Day13;
 public interface INode
 {
     public ListNode? Parent { get; set; }
-
-    bool? IsInOrder(INode other);
 }
 
-public class ScalarNode : INode
+public class ScalarNode : INode, IComparable<INode>
 {
     public ListNode? Parent { get; set; }
 
@@ -26,13 +24,19 @@ public class ScalarNode : INode
         return node;
     }
 
-    public bool? IsInOrder(INode other)
+    public int CompareTo(INode? other)
         => other switch
         {
-            ScalarNode scalar => Value == scalar.Value
-                ? null
-                : Value - scalar.Value <= 0,
-            ListNode list => AsListNode().IsInOrder(list),
+            // If both values are integers, the lower integer should come first.
+            // If the left integer is lower than the right integer, the inputs
+            // are in the right order. If the left integer is higher than the right
+            // integer, the inputs are not in the right order
+            ScalarNode scalar => Value - scalar.Value,
+
+            // If exactly one value is an integer, convert the integer to a list
+            // which contains that integer as its only value
+            ListNode list => AsListNode().CompareTo(list),
+
             _ => throw new UnreachableException(),
         };
 
@@ -40,7 +44,7 @@ public class ScalarNode : INode
         => Value.ToString();
 }
 
-public class ListNode : INode
+public class ListNode : INode, IComparable<INode>
 {
     public ListNode? Parent { get; set; }
 
@@ -52,7 +56,7 @@ public class ListNode : INode
         node.Parent = this;
     }
 
-    public bool? IsInOrder(INode other)
+    public int CompareTo(INode? other)
     {
         var node = other switch
         {
@@ -61,6 +65,8 @@ public class ListNode : INode
             _ => throw new UnreachableException()
         };
 
+        // If both values are lists, compare the first value of each list,
+        // then the second value, and so on
         var ownNodes = new Queue<INode>(Nodes);
         var otherNodes = new Queue<INode>(node.Nodes);
 
@@ -68,24 +74,31 @@ public class ListNode : INode
         {
             var (left, right) = (ownNodes.Dequeue(), otherNodes.Dequeue());
 
-            var isInOrder = left switch
+            var order = left switch
             {
-                ScalarNode scalar => scalar.IsInOrder(right),
-                ListNode list => list.IsInOrder(right),
+                ScalarNode scalar => scalar.CompareTo(right),
+                ListNode list => list.CompareTo(right),
                 _ => throw new UnreachableException()
             };
 
-            if (isInOrder.HasValue)
+            var isInOrder = order != 0;
+
+            if (isInOrder)
             {
-                return isInOrder;
+                return order;
             }
         }
 
         return (ownNodes.Count, otherNodes.Count) switch
         {
-            (> 0, 0) => false,
-            (0, > 0) => true,
-            _ => true,
+            // If the right list runs out of items first, the inputs are not in the right order
+            ( > 0, 0) => 1,
+
+            // If the left list runs out of items first, the inputs are in the right order
+            (0, > 0) => -1,
+
+            // If the lists are the same length and no comparison makes a decision about the order
+            _ => 0,
         };
     }
 
@@ -93,10 +106,21 @@ public class ListNode : INode
         => $"[{string.Join(',', Nodes.Select(node => node.ToString()))}]";
 }
 
+public class NodeComparer : IComparer<INode>
+{
+    public int Compare(INode? x, INode? y)
+        => x switch
+        {
+            ScalarNode sn => sn.CompareTo(y),
+            ListNode ln => ln.CompareTo(y),
+            _ => throw new ArgumentException(),
+        };
+}
+
 public record Packet(ListNode Left, ListNode Right)
 {
     public bool IsInOrder()
-        => Left.IsInOrder(Right)!.Value;
+        => Left.CompareTo(Right) < 0;
 }
 
 public class Solver : Solver<IEnumerable<Packet>, int>
@@ -104,20 +128,7 @@ public class Solver : Solver<IEnumerable<Packet>, int>
     public Solver() : base("Day13/input.txt") { }
 
     public override int PartOne(IEnumerable<Packet> input)
-    {
-        var indexes = new List<int>();
-
-        var packets = input.ToArray();
-        for (var i = 0; i < packets.Length; ++i)
-        {
-            if (packets[i].IsInOrder())
-            {
-                indexes.Add(i + 1);
-            }
-        }
-
-        return indexes.Sum();
-    }
+        => input.Select((packet, index) => packet.IsInOrder() ? index + 1 : 0).Sum();
 
     public override int PartTwo(IEnumerable<Packet> input)
     {
