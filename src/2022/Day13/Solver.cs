@@ -5,6 +5,8 @@ namespace _2022.Day13;
 public interface INode
 {
     public ListNode? Parent { get; set; }
+    
+    public int CompareTo(INode? other);
 }
 
 public class ScalarNode : INode, IComparable<INode>
@@ -31,7 +33,13 @@ public class ScalarNode : INode, IComparable<INode>
             // If the left integer is lower than the right integer, the inputs
             // are in the right order. If the left integer is higher than the right
             // integer, the inputs are not in the right order
-            ScalarNode scalar => Value - scalar.Value,
+            ScalarNode scalar => Value == scalar.Value
+                ? 0
+                : Value < scalar.Value
+                    // Left side is smaller, so inputs are in the right order
+                    ? -1
+                    // Right side is smaller, so inputs are not in the right order
+                    : 1,
 
             // If exactly one value is an integer, convert the integer to a list
             // which contains that integer as its only value
@@ -67,34 +75,28 @@ public class ListNode : INode, IComparable<INode>
 
         // If both values are lists, compare the first value of each list,
         // then the second value, and so on
-        var ownNodes = new Queue<INode>(Nodes);
-        var otherNodes = new Queue<INode>(node.Nodes);
+        var leftNodes = new Queue<INode>(Nodes);
+        var rightNodes = new Queue<INode>(node.Nodes);
 
-        while (ownNodes.Count > 0 && otherNodes.Count > 0)
+        while (leftNodes.Count > 0 && rightNodes.Count > 0)
         {
-            var (left, right) = (ownNodes.Dequeue(), otherNodes.Dequeue());
+            var (left, right) = (leftNodes.Dequeue(), rightNodes.Dequeue());
+            
+            var order = left.CompareTo(right);
 
-            var order = left switch
-            {
-                ScalarNode scalar => scalar.CompareTo(right),
-                ListNode list => list.CompareTo(right),
-                _ => throw new UnreachableException()
-            };
-
-            var isInOrder = order != 0;
-
-            if (isInOrder)
+            var isOrderKnown = order != 0;
+            if (isOrderKnown)
             {
                 return order;
             }
         }
 
-        return (ownNodes.Count, otherNodes.Count) switch
+        return (leftNodes.Count, rightNodes.Count) switch
         {
-            // If the right list runs out of items first, the inputs are not in the right order
+            // Right side ran out of items, so inputs are not in the right order
             ( > 0, 0) => 1,
 
-            // If the left list runs out of items first, the inputs are in the right order
+            // Left side ran out of items, so inputs are in the right order
             (0, > 0) => -1,
 
             // If the lists are the same length and no comparison makes a decision about the order
@@ -109,12 +111,7 @@ public class ListNode : INode, IComparable<INode>
 public class NodeComparer : IComparer<INode>
 {
     public int Compare(INode? x, INode? y)
-        => x switch
-        {
-            ScalarNode sn => sn.CompareTo(y),
-            ListNode ln => ln.CompareTo(y),
-            _ => throw new ArgumentException(),
-        };
+        => x!.CompareTo(y);
 }
 
 public record Packet(ListNode Left, ListNode Right)
@@ -128,7 +125,11 @@ public class Solver : Solver<IEnumerable<Packet>, int>
     public Solver() : base("Day13/input.txt") { }
 
     public override int PartOne(IEnumerable<Packet> input)
-        => input.Select((packet, index) => packet.IsInOrder() ? index + 1 : 0).Sum();
+    {
+        var x = input.Select((packet, index) => packet.IsInOrder() ? index + 1 : 0).ToArray();
+        var y = string.Join(',', x);
+        return input.Select((packet, index) => packet.IsInOrder() ? index + 1 : 0).Sum();
+    }
 
     public override int PartTwo(IEnumerable<Packet> input)
     {
@@ -157,36 +158,46 @@ public class Solver : Solver<IEnumerable<Packet>, int>
     {
         var root = new ListNode();
 
+        INode node;
         var current = root;
 
-        var rootContent = line[1..^1];
-        foreach (var symbol in rootContent)
+        var nextNodeRawValue = string.Empty;
+        foreach (var symbol in line[1..^1])
         {
-            if (symbol is ',')
+            // If we encounter a digit, we append it to the next value
+            if (char.IsDigit(symbol))
             {
+                nextNodeRawValue += symbol;
                 continue;
             }
 
-            else if (symbol is '[')
+            // Otherwise, handle list separators '[' and ']'
+            if (nextNodeRawValue.Length > 0)
+            {
+                node = new ScalarNode(int.Parse(nextNodeRawValue));
+                nextNodeRawValue = string.Empty;
+
+                current!.Add(node);
+            }
+
+            if (symbol is '[')
             {
                 var next = new ListNode();
                 current!.Add(next);
 
                 current = next;
             }
-
             else if (symbol is ']')
             {
                 current = current!.Parent;
             }
+        }
 
-            else
-            {
-                var value = int.Parse(symbol.ToString());
-                var scalar = new ScalarNode(value);
-
-                current!.Add(scalar);
-            }
+        // Flush any remaining value
+        if (nextNodeRawValue.Length > 0)
+        {
+            node = new ScalarNode(int.Parse(nextNodeRawValue));
+            current!.Add(node);
         }
 
         return root;

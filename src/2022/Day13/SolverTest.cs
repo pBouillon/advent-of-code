@@ -32,14 +32,12 @@ public class SolverTest : TestEngine<Solver, IEnumerable<Packet>, int>
 
     public override Puzzle PartOne => new()
     {
-        ShouldSkipTests = true,
-
         Example = new()
         {
             Input = Input,
             Result = 13,
         },
-        Solution = 0,
+        Solution = 6101,
     };
 
     public override Puzzle PartTwo => new()
