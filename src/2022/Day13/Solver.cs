@@ -108,12 +108,6 @@ public class ListNode : INode, IComparable<INode>
         => $"[{string.Join(',', Nodes.Select(node => node.ToString()))}]";
 }
 
-public class NodeComparer : IComparer<INode>
-{
-    public int Compare(INode? x, INode? y)
-        => x!.CompareTo(y);
-}
-
 public record Packet(ListNode Left, ListNode Right)
 {
     public bool IsInOrder()
@@ -125,15 +119,22 @@ public class Solver : Solver<IEnumerable<Packet>, int>
     public Solver() : base("Day13/input.txt") { }
 
     public override int PartOne(IEnumerable<Packet> input)
-    {
-        var x = input.Select((packet, index) => packet.IsInOrder() ? index + 1 : 0).ToArray();
-        var y = string.Join(',', x);
-        return input.Select((packet, index) => packet.IsInOrder() ? index + 1 : 0).Sum();
-    }
+        => input.Select((packet, index) => packet.IsInOrder() ? index + 1 : 0).Sum();
 
     public override int PartTwo(IEnumerable<Packet> input)
     {
-        throw new NotImplementedException();
+        var rawDividers = new[] { "[[2]]", "[[6]]" };
+
+        var sequences = new[] { input, ParseInput(rawDividers) }
+            .SelectMany(packets => packets)
+            .SelectMany(packet => new[] { packet.Left, packet.Right })
+            .ToList();
+
+        sequences.Sort((left, right) => left.CompareTo(right));
+
+        return sequences
+            .Select((sequence, index) => rawDividers.Contains(sequence.ToString()) ? index + 1 : 1)
+            .Aggregate(1, (index, key) => index * key);
     }
 
     public override IEnumerable<Packet> ParseInput(IEnumerable<string> input)

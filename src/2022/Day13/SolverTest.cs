@@ -42,13 +42,11 @@ public class SolverTest : TestEngine<Solver, IEnumerable<Packet>, int>
 
     public override Puzzle PartTwo => new()
     {
-        ShouldSkipTests = true,
-
         Example = new()
         {
             Input = Input,
-            Result = 0,
+            Result = 140,
         },
-        Solution = 0,
+        Solution = 21909,
     };
 }
