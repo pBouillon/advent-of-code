@@ -25,6 +25,9 @@ public class Cave
 
     private readonly Material[,] _cave;
 
+    private readonly int _floorOffset = 1_000;
+    private readonly Material[,] _flooredCave;
+
     private int Width => MaxWidth - MinWidth;
 
     public Cave(int depth, int minWidth, int maxWidth)
@@ -32,18 +35,25 @@ public class Cave
         (Depth, MinWidth, MaxWidth) = (depth + 1, minWidth, maxWidth + 1);
 
         _cave = new Material[Depth, Width];
-
         for (var i = 0; i < Depth * Width; ++i)
         {
             _cave[i % Depth, i / Depth] = Material.Air;
+        }
+
+        var floorWidth = _floorOffset + Width + _floorOffset;
+        var floorDepth = Depth + 2;
+        _flooredCave = new Material[floorDepth, floorWidth];
+        for (var i = 0; i < Depth * floorWidth; ++i)
+        {
+            _flooredCave[i % floorDepth, i / floorDepth] = i % floorDepth == floorDepth - 1
+                ? Material.Rock
+                : Material.Air;
         }
     }
 
     public void AddRock(Coordinate from, Coordinate to)
     {
-        from = @from with { Column = from.Column - MinWidth };
-        to = to with { Column = to.Column - MinWidth };
-
+        // Floored cave
         var delta = new
         {
             Column = from.Column == to.Column ? 0 : from.Column < to.Column ? 1 : -1,
@@ -55,11 +65,23 @@ public class Cave
             depth - delta.Depth != to.Depth || column - delta.Column != to.Column;
             (depth, column) = (depth + delta.Depth, column + delta.Column))
         {
+            _flooredCave[depth, _floorOffset + column] = Material.Rock;
+        }
+
+        // Abyssimal cave
+        from = @from with { Column = from.Column - MinWidth };
+        to = to with { Column = to.Column - MinWidth };
+
+        for (
+            var (depth, column) = from;
+            depth - delta.Depth != to.Depth || column - delta.Column != to.Column;
+            (depth, column) = (depth + delta.Depth, column + delta.Column))
+        {
             _cave[depth, column] = Material.Rock;
         }
     }
 
-    public bool DropSand()
+    public bool DropSandToTheVoid()
     {
         var grainCoordinate = new Coordinate(0, 500 - MinWidth);
 
@@ -85,7 +107,31 @@ public class Cave
         return isIntoTheAbyss;
     }
 
-    private Coordinate? GetNextCoordinateOfGrainOn(Coordinate initialCoordinate)
+    public bool DropSandUntilReachingTheSource()
+    {
+        var source = new Coordinate(0, _floorOffset + 500);
+        var grainCoordinate = source;
+
+        bool hasSettled;
+        bool hasReachedTheSource;
+
+        do
+        {
+            var next = GetNextCoordinateOfGrainOn(grainCoordinate!, floored: true);
+
+            hasSettled = grainCoordinate == next;
+            hasReachedTheSource = next == source;
+
+            grainCoordinate = next;
+        } while (!hasSettled && !hasReachedTheSource);
+
+        var (depth, column) = grainCoordinate;
+        _flooredCave[depth, column] = Material.Sand;
+
+        return hasReachedTheSource;
+    }
+
+    private Coordinate? GetNextCoordinateOfGrainOn(Coordinate initialCoordinate, bool floored = false)
     {
         // A unit of sand always falls down one step if possible
         var bellow = initialCoordinate with { Depth = initialCoordinate.Depth + 1 };
@@ -100,7 +146,7 @@ public class Cave
         // If that tile is blocked, the unit of sand attempts to instead move diagonally one step
         // down and to the right
         var downRight = bellow with { Column = bellow.Column + 1 };
-
+        
         if (IsIntoTheAbyss(downRight)) return null;
 
         return IsBlocked(downRight)
@@ -108,12 +154,16 @@ public class Cave
             : downRight;
 
         bool IsBlocked(Coordinate coordinate)
-            => _cave[coordinate.Depth, coordinate.Column] != Material.Air;
+            => floored
+                ? _flooredCave[coordinate.Depth, coordinate.Column] != Material.Air
+                : _cave[coordinate.Depth, coordinate.Column] != Material.Air;
 
         bool IsIntoTheAbyss(Coordinate coordinate) 
-            => coordinate.Depth > Depth 
+            => coordinate.Depth > (floored ? Depth + 2 : Depth)
             || coordinate.Column < 0 
-            || coordinate.Column >= Width;
+            || coordinate.Column >= (floored
+                ? _floorOffset + Width + _floorOffset
+                : Width);
     }
 
     public override string ToString()
@@ -125,6 +175,28 @@ public class Cave
             for (int j = 0; j < _cave.GetLength(1); j++)
             {
                 var symbol = _cave[i, j] switch
+                {
+                    Material.Air => '.',
+                    Material.Rock => '#',
+                    Material.Sand => 'o',
+                    _ => '?',
+                };
+
+                visualization.Append(symbol);
+            }
+
+            visualization.AppendLine();
+        }
+
+        visualization.AppendLine();
+        visualization.AppendLine();
+        visualization.AppendLine();
+
+        for (int i = 0; i < _flooredCave.GetLength(0); i++)
+        {
+            for (int j = 0; j < _flooredCave.GetLength(1); j++)
+            {
+                var symbol = _flooredCave[i, j] switch
                 {
                     Material.Air => '.',
                     Material.Rock => '#',
@@ -150,14 +222,18 @@ public class Solver : Solver<Cave, int>
     {
         var counter = 0;
 
-        while (!input.DropSand()) ++counter;
+        while (!input.DropSandToTheVoid()) ++counter;
 
         return counter;
     }
 
     public override int PartTwo(Cave input)
     {
-        throw new NotImplementedException();
+        var counter = 1;
+
+        while (!input.DropSandUntilReachingTheSource()) ++counter;
+
+        return counter;
     }
 
     public override Cave ParseInput(IEnumerable<string> input)

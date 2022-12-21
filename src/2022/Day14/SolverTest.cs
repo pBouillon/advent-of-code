@@ -20,13 +20,11 @@ public class SolverTest : TestEngine<Solver, Cave, int>
 
     public override Puzzle PartTwo => new()
     {
-        ShouldSkipTests = true,
-
         Example = new()
         {
             Input = new Solver().ParseInput(_rawInput),
-            Result = 24,
+            Result = 93,
         },
-        Solution = 0,
+        Solution = 24589,
     };
 }
