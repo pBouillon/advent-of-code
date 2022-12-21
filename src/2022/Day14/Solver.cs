@@ -11,7 +11,7 @@ public record Coordinate(int Depth, int Column)
             .Select(int.Parse)
             .ToArray();
 
-        return new Coordinate(axes[0], axes[1]);
+        return new Coordinate(axes[1], axes[0]);
     }
 }
 
@@ -51,11 +51,11 @@ public class Cave
         };
 
         for (
-            var (x, y) = from;
-            x - delta.Column != to.Column || y - delta.Depth != to.Depth;
-            (x, y) = (x + delta.Column, y + delta.Depth))
+            var (depth, column) = from;
+            depth - delta.Depth != to.Depth || column - delta.Column != to.Column;
+            (depth, column) = (depth + delta.Depth, column + delta.Column))
         {
-            _cave[y, x] = Material.Rock;
+            _cave[depth, column] = Material.Rock;
         }
     }
 
@@ -76,13 +76,19 @@ public class Cave
             grainCoordinate = next;
         } while (!hasSettled && !isIntoTheAbyss);
 
+        if (grainCoordinate is not null)
+        {
+            var (depth, column) = grainCoordinate;
+            _cave[depth, column] = Material.Sand;
+        }
+
         return isIntoTheAbyss;
     }
 
     private Coordinate? GetNextCoordinateOfGrainOn(Coordinate initialCoordinate)
     {
         // A unit of sand always falls down one step if possible
-        var bellow = initialCoordinate with { Depth = Depth + 1 };
+        var bellow = initialCoordinate with { Depth = initialCoordinate.Depth + 1 };
         if (!IsBlocked(bellow)) return bellow;
 
         // The unit of sand attempts to instead move diagonally one step down and to the left
@@ -107,7 +113,7 @@ public class Cave
         bool IsIntoTheAbyss(Coordinate coordinate) 
             => coordinate.Depth > Depth 
             || coordinate.Column < 0 
-            || coordinate.Column > Width;
+            || coordinate.Column >= Width;
     }
 
     public override string ToString()
@@ -138,7 +144,7 @@ public class Cave
 
 public class Solver : Solver<Cave, int>
 {
-    public Solver() : base("Day13/input.txt") { }
+    public Solver() : base("Day14/input.txt") { }
 
     public override int PartOne(Cave input)
     {
