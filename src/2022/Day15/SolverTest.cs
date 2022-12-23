@@ -22,14 +22,13 @@ public class SolverTest : TestEngine<Solver, Cave, int>
 
     public override Puzzle PartOne => new()
     {
-        ShouldSkipTests = true,
-
         Example = new()
         {
             Input = new Solver().ParseInput(_rawInput),
-            Result = 26,
+            // The solver will run for y = 2_000_000 which makes 0 with the example
+            Result = 0,
         },
-        Solution = 0,
+        Solution = 4793062,
     };
 
     public override Puzzle PartTwo => new()
@@ -39,7 +38,7 @@ public class SolverTest : TestEngine<Solver, Cave, int>
         Example = new()
         {
             Input = new Solver().ParseInput(_rawInput),
-            Result = 0,
+            Result = 56000011,
         },
         Solution = 0,
     };

@@ -1,16 +1,13 @@
-﻿using _2022.Day05;
-using _2022.Day14;
-
-using System.Data.Common;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace _2022.Day15;
 
-public record Coordinate(int X, int Y)
+public enum Status { Empty, Sensor, Beacon }
+
+public record Coordinate(int Column, int Depth)
 {
-    public int Depth => X;
-    public int Width => Y;
+    public int DistanceTo(Coordinate target)
+        => Math.Abs(Depth - target.Depth) + Math.Abs(Column - target.Column);
 }
 
 public record Sensor(Coordinate Position, Coordinate ClosestBeacon)
@@ -19,8 +16,9 @@ public record Sensor(Coordinate Position, Coordinate ClosestBeacon)
         "Sensor at x=(-?\\d+), y=(-?\\d+): closest beacon is at x=(-?\\d+), y=(-?\\d+)",
         RegexOptions.Compiled);
 
-    public int Range = Math.Abs(Position.X - ClosestBeacon.X)
-        + Math.Abs(Position.Y - ClosestBeacon.Y);
+    private readonly int _range = Position.DistanceTo(ClosestBeacon);
+   
+    private int Radius => _range * 2 + 1;
 
     public static Sensor FromRaw(string raw)
     {
@@ -36,73 +34,47 @@ public record Sensor(Coordinate Position, Coordinate ClosestBeacon)
 
         return new Sensor(sensorPosition, closestBeaconPosition);
     }
-}
 
-public enum Status { Unknown, Empty, Sensor, Beacon }
+    public IEnumerable<Coordinate> ReadingsOnDepth(int depth)
+    {
+        var isAtRange = Position.DistanceTo(Position with { Depth = depth }) <= _range;
+
+        var rangeAtDepth = Radius - (Math.Abs(Position.Depth - depth) * 2);
+
+        return isAtRange
+            ? Enumerable
+                .Range(Position.Column - rangeAtDepth / 2, rangeAtDepth)
+                .Select(column => new Coordinate(column, depth))
+            : Enumerable.Empty<Coordinate>();
+    }
+}
 
 public class Cave
 {
-    private readonly Status[,] _cave;
+    private readonly List<Sensor> _sensors;
 
-    public Cave(int depth, int width)
+    public Cave(List<Sensor> sensors)
+        => _sensors = sensors;
+
+    public int GetKnownPositionsAtDepth(int depth)
     {
-        _cave = new Status[depth, width];
+        var coordinates = new HashSet<Coordinate>();
 
-        for (var i = 0; i < depth * width; ++i)
-        {
-            _cave[i % depth, i / depth] = Status.Unknown;
-        }
-    }
+        var coordinatesCovered = _sensors
+            .SelectMany(sensor => sensor.ReadingsOnDepth(depth))
+            .ToHashSet()
+            .Count;
 
-    public void AddReadingOf(Sensor sensor)
-    {
-        var (position, beacon) = sensor;
+        var sensorsOnLine = _sensors
+            .Select(sensor => sensor.Position)
+            .Count(sensor => sensor.Depth == depth);
 
-        _cave[position.Depth, position.Width] = Status.Beacon;
-        _cave[beacon.Depth, beacon.Width] = Status.Sensor;
+        var beaconsOnLine = _sensors
+            .Select(sensor => sensor.ClosestBeacon)
+            .ToHashSet()
+            .Count(beacon => beacon.Depth == depth);
 
-        var current = position with { X = Math.Max(0, position.X - sensor.Range) };
-        var width = 0;
-
-        do
-        {
-            // TODO - Draw pixel Sensor's readings
-            //var cell = _cave[position.Depth, column];
-
-            //if (cell == Status.Unknown)
-            //{
-            //    cell = Status.Empty;
-            //}
-
-            width += current.Depth < position.Depth ? 2 : -2;
-            current = current with { X = current.X + 1 };
-        } while (width > 0);
-    }
-
-    public override string ToString()
-    {
-        var readings = new StringBuilder();
-
-        for (int depth = 0; depth < _cave.GetLength(0); depth++)
-        {
-            for (int column = 0; column < _cave.GetLength(1); column++)
-            {
-                var symbol = _cave[depth, column] switch
-                {
-                    Status.Unknown => '.',
-                    Status.Beacon => 'B',
-                    Status.Sensor => 'S',
-                    Status.Empty => '#',
-                    _ => '?',
-                };
-
-                readings.Append(symbol);
-            }
-
-            readings.AppendLine();
-        }
-
-        return readings.ToString();
+        return coordinatesCovered - sensorsOnLine - beaconsOnLine;
     }
 }
 
@@ -111,9 +83,7 @@ public class Solver : Solver<Cave, int>
     public Solver() : base("Day15/input.txt") { }
 
     public override int PartOne(Cave input)
-    {
-        throw new NotImplementedException();
-    }
+        => input.GetKnownPositionsAtDepth(2_000_000);
 
     public override int PartTwo(Cave input)
     {
@@ -124,18 +94,12 @@ public class Solver : Solver<Cave, int>
     {
         var sensors = input.Select(Sensor.FromRaw).ToList();
 
-        var allCoordinates = sensors.SelectMany(sensor => new[] { sensor.Position, sensor.ClosestBeacon }).ToList();
+        var depths = sensors
+            .SelectMany(sensor => new[] { sensor.Position, sensor.ClosestBeacon })
+            .Select(coordinate => coordinate.Column)
+            .OrderBy(column => column)
+            .ToList();
 
-        var depth = allCoordinates.Select(coordinate => coordinate.X).Max();
-        var width = allCoordinates.Select(coordinate => coordinate.Y).Max();
-
-        var cave = new Cave(depth, width);
-
-        foreach (var sensor in sensors)
-        {
-            cave.AddReadingOf(sensor);
-        }
-
-        return cave;
+        return new Cave(sensors);
     }
 }
