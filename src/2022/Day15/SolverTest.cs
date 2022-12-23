@@ -1,6 +1,6 @@
 ﻿namespace _2022.Day15;
 
-public class SolverTest : TestEngine<Solver, Cave, int>
+public class SolverTest : TestEngine<Solver, Cave, long>
 {
     private readonly IEnumerable<string> _rawInput = new[]
     {
@@ -33,8 +33,6 @@ public class SolverTest : TestEngine<Solver, Cave, int>
 
     public override Puzzle PartTwo => new()
     {
-        ShouldSkipTests = true,
-
         Example = new()
         {
             Input = new Solver().ParseInput(_rawInput),

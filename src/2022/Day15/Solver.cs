@@ -8,6 +8,8 @@ public record Coordinate(int Column, int Depth)
 {
     public int DistanceTo(Coordinate target)
         => Math.Abs(Depth - target.Depth) + Math.Abs(Column - target.Column);
+
+    public long TuningFrequency => Column * 4_000_000 + Depth;
 }
 
 public record Sensor(Coordinate Position, Coordinate ClosestBeacon)
@@ -76,19 +78,47 @@ public class Cave
 
         return coordinatesCovered - sensorsOnLine - beaconsOnLine;
     }
+
+    public long GetTuningFrequencyOfBeacon(int offsetLimit = 4_000_000)
+    {
+        for (var i = 0; i < offsetLimit; ++i)
+        {
+            var readings = _sensors
+                .SelectMany(sensor => sensor.ReadingsOnDepth(i))
+                .ToHashSet()
+                .Select(position => position.Column)
+                .Where(column => column >= 0 && column <= offsetLimit)
+                .OrderBy(column => column)
+                .ToArray();
+
+            for (var j = readings[1]; j < readings[^1]; ++j)
+            {
+                var previous = readings[j - 1];
+                var current = readings[j];
+
+                var gapFound = (current - previous) == 2;
+
+                if (gapFound)
+                {
+                    var beacon = new Coordinate(current - 1, i);
+                    return beacon.TuningFrequency;
+                }
+            }
+        }
+
+        return -1;
+    }
 }
 
-public class Solver : Solver<Cave, int>
+public class Solver : Solver<Cave, long>
 {
     public Solver() : base("Day15/input.txt") { }
 
-    public override int PartOne(Cave input)
+    public override long PartOne(Cave input)
         => input.GetKnownPositionsAtDepth(2_000_000);
 
-    public override int PartTwo(Cave input)
-    {
-        throw new NotImplementedException();
-    }
+    public override long PartTwo(Cave input)
+        => input.GetTuningFrequencyOfBeacon();
 
     public override Cave ParseInput(IEnumerable<string> input)
     {
