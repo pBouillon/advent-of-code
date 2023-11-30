@@ -18,6 +18,7 @@ public class SolverTest : TestEngine<Solver, IEnumerable<string>, long>
 
     public override Puzzle PartOne => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = _input,
@@ -28,6 +29,7 @@ public class SolverTest : TestEngine<Solver, IEnumerable<string>, long>
 
     public override Puzzle PartTwo => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = _input,

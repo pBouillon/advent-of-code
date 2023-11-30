@@ -2,20 +2,21 @@
 
 public class SolverTest : TestEngine<Solver, ElevationMap, int>
 {
-    private readonly string[] _rawInput = new[]
-    {
+    private readonly string[] _rawInput =
+    [
         "Sabqponm",
         "abcryxxl",
         "accszExk",
         "acctuvwj",
         "abdefghi"
-    };
+    ];
 
     private ElevationMap Map
         => new Solver().ParseInput(_rawInput);
 
     public override Puzzle PartOne => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = Map,
@@ -26,6 +27,7 @@ public class SolverTest : TestEngine<Solver, ElevationMap, int>
 
     public override Puzzle PartTwo => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = Map,

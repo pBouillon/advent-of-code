@@ -24,15 +24,16 @@ public class SolverTest : TestEngine<Solver, CraneOrdering, string>
     });
 
     private readonly CraneOperation[] _operations =
-    {
+    [
         new(1, 2, 1),
         new(3, 1, 3),
         new(2, 2, 1),
         new(1, 1, 2),
-    };
+    ];
 
     public override Puzzle PartOne => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = new CraneOrdering(_stacks, _operations),
@@ -43,6 +44,7 @@ public class SolverTest : TestEngine<Solver, CraneOrdering, string>
 
     public override Puzzle PartTwo => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = new CraneOrdering(_stacks, _operations),

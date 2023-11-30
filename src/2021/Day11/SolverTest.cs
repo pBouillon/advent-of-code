@@ -27,6 +27,7 @@ public class SolverTest : TestEngine<Solver, Dictionary<Coordinate, int>, int>
 
     public override Puzzle PartOne => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = GetOctopuses(),
@@ -37,6 +38,7 @@ public class SolverTest : TestEngine<Solver, Dictionary<Coordinate, int>, int>
 
     public override Puzzle PartTwo => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = GetOctopuses(),

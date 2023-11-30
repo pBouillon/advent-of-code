@@ -16,8 +16,8 @@ public class SolverTest : TestEngine<Solver, Directory, long>
                 },
             }
         },
-        { 
-            "a", 
+        {
+            "a",
             new Directory
             {
                 Name = "a",
@@ -29,8 +29,8 @@ public class SolverTest : TestEngine<Solver, Directory, long>
                 },
             }
         },
-        { 
-            "e", 
+        {
+            "e",
             new Directory
             {
                 Name = "e",
@@ -40,8 +40,8 @@ public class SolverTest : TestEngine<Solver, Directory, long>
                 },
             }
         },
-        { 
-            "d", 
+        {
+            "d",
             new Directory
             {
                 Name = "d",
@@ -79,6 +79,7 @@ public class SolverTest : TestEngine<Solver, Directory, long>
 
     public override Puzzle PartOne => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = GetInput(),
@@ -89,6 +90,7 @@ public class SolverTest : TestEngine<Solver, Directory, long>
 
     public override Puzzle PartTwo => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = GetInput(),

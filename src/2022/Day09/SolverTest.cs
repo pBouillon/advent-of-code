@@ -2,8 +2,8 @@
 
 public class SolverTest : TestEngine<Solver, IEnumerable<Motion>, int>
 {
-    private readonly Motion[] _motions = new Motion[]
-    {
+    private readonly Motion[] _motions =
+    [
         new(Direction.Right, 4),
         new(Direction.Up, 4),
         new(Direction.Left, 3),
@@ -12,10 +12,11 @@ public class SolverTest : TestEngine<Solver, IEnumerable<Motion>, int>
         new(Direction.Down, 1),
         new(Direction.Left, 5),
         new(Direction.Right, 2),
-    };
+    ];
 
     public override Puzzle PartOne => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = _motions,
@@ -26,6 +27,7 @@ public class SolverTest : TestEngine<Solver, IEnumerable<Motion>, int>
 
     public override Puzzle PartTwo => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = _motions,

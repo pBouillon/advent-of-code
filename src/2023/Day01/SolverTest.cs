@@ -1,10 +1,9 @@
-﻿namespace _2015.Day01;
+﻿namespace _2023.Day01;
 
 public class SolverTest : TestEngine<Solver, string, int>
 {
     public override Puzzle PartOne => new()
     {
-        ShouldSkipTests = true,
         Example = new Example
         {
             Input = ")())())",
@@ -15,7 +14,6 @@ public class SolverTest : TestEngine<Solver, string, int>
 
     public override Puzzle PartTwo => new()
     {
-        ShouldSkipTests = true,
         Example = new Example
         {
             Input = "()())",

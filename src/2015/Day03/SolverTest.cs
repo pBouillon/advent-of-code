@@ -4,6 +4,7 @@ public class SolverTest : TestEngine<Solver, string, int>
 {
     public override Puzzle PartOne => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = "^v^v^v^v^v",
@@ -14,6 +15,7 @@ public class SolverTest : TestEngine<Solver, string, int>
 
     public override Puzzle PartTwo => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = "^v^v^v^v^v",

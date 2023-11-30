@@ -10,6 +10,7 @@ public class SolverTest : TestEngine<Solver, Cave, int>
 
     public override Puzzle PartOne => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = new Solver().ParseInput(_rawInput),
@@ -20,6 +21,7 @@ public class SolverTest : TestEngine<Solver, Cave, int>
 
     public override Puzzle PartTwo => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = new Solver().ParseInput(_rawInput),

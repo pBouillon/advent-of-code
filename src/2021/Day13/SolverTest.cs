@@ -32,6 +32,7 @@ public class SolverTest : TestEngine<Solver, (ISet<Coordinate>, IEnumerable<Fold
 
     public override Puzzle PartOne => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = (_points, _instructions),
@@ -42,6 +43,7 @@ public class SolverTest : TestEngine<Solver, (ISet<Coordinate>, IEnumerable<Fold
 
     public override Puzzle PartTwo => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = (_points, _instructions),

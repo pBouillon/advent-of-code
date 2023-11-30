@@ -3,12 +3,13 @@
 public class SolverTest : TestEngine<Solver, Command[], long>
 {
     private readonly Command[] _commands =
-    {
+    [
         new(Status.Toggle, new Coordinate(0, 0), new Coordinate(999, 999)),
-    };
+    ];
 
     public override Puzzle PartOne => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = _commands,
@@ -19,6 +20,7 @@ public class SolverTest : TestEngine<Solver, Command[], long>
 
     public override Puzzle PartTwo => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = _commands,

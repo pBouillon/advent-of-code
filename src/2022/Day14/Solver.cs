@@ -125,7 +125,7 @@ public class Cave
             grainCoordinate = next;
         } while (!hasSettled && !hasReachedTheSource);
 
-        var (depth, column) = grainCoordinate;
+        var (depth, column) = grainCoordinate!;
         _flooredCave[depth, column] = Material.Sand;
 
         return hasReachedTheSource;

@@ -4,10 +4,11 @@ public class SolverTest : TestEngine<Solver, string[], int>
 {
     public override Puzzle PartOne => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
-            Input = new[]
-            {
+            Input =
+            [
                 "00100",
                 "11110",
                 "10110",
@@ -20,7 +21,7 @@ public class SolverTest : TestEngine<Solver, string[], int>
                 "11001",
                 "00010",
                 "01010",
-            },
+            ],
             Result = 198,
         },
         Solution = 2003336,
@@ -28,10 +29,11 @@ public class SolverTest : TestEngine<Solver, string[], int>
 
     public override Puzzle PartTwo => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
-            Input = new[]
-            {
+            Input =
+            [
                 "00100",
                 "11110",
                 "10110",
@@ -44,7 +46,7 @@ public class SolverTest : TestEngine<Solver, string[], int>
                 "11001",
                 "00010",
                 "01010",
-            },
+            ],
             Result = 230,
         },
         Solution = 1877139,

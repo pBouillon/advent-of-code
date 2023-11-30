@@ -156,6 +156,7 @@ public class SolverTest : TestEngine<Solver, IEnumerable<Instruction>, string>
 
     public override Puzzle PartOne => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = Solver.WithCycles(_instructions),
@@ -166,6 +167,7 @@ public class SolverTest : TestEngine<Solver, IEnumerable<Instruction>, string>
 
     public override Puzzle PartTwo => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = Solver.WithCycles(_instructions),

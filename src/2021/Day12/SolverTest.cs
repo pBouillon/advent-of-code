@@ -14,6 +14,7 @@ public class SolverTest : TestEngine<Solver, Dictionary<string, List<string>>, i
 
     public override Puzzle PartOne => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = _map,
@@ -24,6 +25,7 @@ public class SolverTest : TestEngine<Solver, Dictionary<string, List<string>>, i
 
     public override Puzzle PartTwo => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = _map,

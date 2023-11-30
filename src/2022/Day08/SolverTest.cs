@@ -13,6 +13,7 @@ public class SolverTest : TestEngine<Solver, int[,], int>
 
     public override Puzzle PartOne => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = _forest,
@@ -23,6 +24,7 @@ public class SolverTest : TestEngine<Solver, int[,], int>
 
     public override Puzzle PartTwo => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = _forest,

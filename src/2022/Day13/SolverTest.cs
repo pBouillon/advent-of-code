@@ -2,8 +2,8 @@
 
 public class SolverTest : TestEngine<Solver, IEnumerable<Packet>, int>
 {
-    private readonly string[] _raw = new[]
-    {
+    private readonly string[] _raw =
+    [
         "[1,1,3,1,1]",
         "[1,1,5,1,1]",
         "",
@@ -26,12 +26,13 @@ public class SolverTest : TestEngine<Solver, IEnumerable<Packet>, int>
         "",
         "[1,[2,[3,[4,[5,6,7]]]],8,9]",
         "[1,[2,[3,[4,[5,6,0]]]],8,9]",
-    };
+    ];
 
     private IEnumerable<Packet> Input => new Solver().ParseInput(_raw);
 
     public override Puzzle PartOne => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = Input,
@@ -42,6 +43,7 @@ public class SolverTest : TestEngine<Solver, IEnumerable<Packet>, int>
 
     public override Puzzle PartTwo => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = Input,

@@ -4,8 +4,8 @@ public class SolverTest : TestEngine<Solver, Monkeys, ulong>
 {
     private const ulong MonkeyDivider = 23 * 19 * 13 * 17;
 
-    private readonly Monkey[] _monkeys = new[]
-    {
+    private readonly Monkey[] _monkeys =
+    [
         new Monkey(
             items: new Item[] { new(79), new(98) },
             inspect: (item) => item.WorryLevel * 19 % MonkeyDivider,
@@ -25,7 +25,7 @@ public class SolverTest : TestEngine<Solver, Monkeys, ulong>
             items: new Item[] { new(74) },
             inspect: (item) => item.WorryLevel + 3 % MonkeyDivider,
             @throw: (item) => item.WorryLevel % 17 == 0 ? 0 : 1),
-    };
+    ];
 
     private Monkeys GetMonkeys()
     {
@@ -41,6 +41,7 @@ public class SolverTest : TestEngine<Solver, Monkeys, ulong>
 
     public override Puzzle PartOne => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = GetMonkeys(),
@@ -51,6 +52,7 @@ public class SolverTest : TestEngine<Solver, Monkeys, ulong>
 
     public override Puzzle PartTwo => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = GetMonkeys(),

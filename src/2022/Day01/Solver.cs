@@ -25,7 +25,7 @@ public class Solver : Solver<IEnumerable<long[]>, long>
         {
             if (string.IsNullOrEmpty(calory))
             {
-                calories.Push(carried.ToArray());
+                calories.Push([.. carried]);
                 carried.Clear();
             }
             else

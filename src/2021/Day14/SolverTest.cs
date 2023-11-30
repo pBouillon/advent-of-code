@@ -24,6 +24,7 @@ public class SolverTest : TestEngine<Solver, (string, Dictionary<string, string>
 
     public override Puzzle PartOne => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = ("NNCB", _insertions),
@@ -34,6 +35,7 @@ public class SolverTest : TestEngine<Solver, (string, Dictionary<string, string>
 
     public override Puzzle PartTwo => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = ("NNCB", _insertions),

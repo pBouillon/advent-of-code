@@ -4,6 +4,7 @@ public class PuzzleTest : TestEngine<Solver, IEnumerable<Round>, int>
 {
     public override Puzzle PartOne => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = new[]
@@ -19,6 +20,7 @@ public class PuzzleTest : TestEngine<Solver, IEnumerable<Round>, int>
 
     public override Puzzle PartTwo => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = new[]

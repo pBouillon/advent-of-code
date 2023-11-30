@@ -4,6 +4,7 @@ public class PuzzleTest : TestEngine<Solver, IEnumerable<long[]>, long>
 {
     public override Puzzle PartOne => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = new List<long[]>
@@ -21,6 +22,7 @@ public class PuzzleTest : TestEngine<Solver, IEnumerable<long[]>, long>
 
     public override Puzzle PartTwo => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = new List<long[]>

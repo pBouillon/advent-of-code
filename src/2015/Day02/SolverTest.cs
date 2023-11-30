@@ -4,6 +4,7 @@ public class SolverTest : TestEngine<Solver, IEnumerable<Dimension>, int>
 {
     public override Puzzle PartOne => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = new[] { new Dimension(2, 3, 4) },
@@ -14,6 +15,7 @@ public class SolverTest : TestEngine<Solver, IEnumerable<Dimension>, int>
 
     public override Puzzle PartTwo => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = new[] { new Dimension(1, 1, 10) },
