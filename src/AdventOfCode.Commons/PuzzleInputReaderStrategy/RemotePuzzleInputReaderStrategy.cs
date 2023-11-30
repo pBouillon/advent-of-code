@@ -40,11 +40,11 @@ public class RemotePuzzleInputReaderStrategy : IPuzzleInputReaderStrategy
     /// <summary>
     /// Create a new cookie container with the one set in <see cref="Configuration.CookieValue"/>
     /// </summary>
-    /// 
+    ///
     /// <returns>
     /// The cookie container for the <see cref="HttpClientHandler"/> to use
     /// </returns>
-    /// 
+    ///
     /// <exception cref="Exception">
     /// Thrown if it is called but <see cref="Configuration.CookieValue"/> is not set
     /// </exception>
