@@ -14,12 +14,11 @@ public class SolverTest : TestEngine<Solver, string[], long>
             ],
             Result = 142,
         },
-        Solution = 55816,
+        Solution = 55_816,
     };
 
     public override Puzzle PartTwo => new()
     {
-        ShouldSkipTests = true,
         Example = new Example
         {
             Input = [
@@ -33,6 +32,6 @@ public class SolverTest : TestEngine<Solver, string[], long>
             ],
             Result = 281,
         },
-        Solution = 0,
+        Solution = 54_980,
     };
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace _2023.Day01;
+﻿namespace _2023.Day01;
 
 public class Solver : Solver<string[], long>
 {
@@ -8,10 +6,10 @@ public class Solver : Solver<string[], long>
 
     public override long PartOne(string[] input)
     {
-        long ExtractNumber(string slice)
+        static long ExtractNumber(string slice)
         {
             var digits = slice
-                .Where(c => char.IsDigit(c))
+                .Where(char.IsDigit)
                 .ToList();
 
             return long.Parse($"{digits.First()}{digits.Last()}");
@@ -71,8 +69,7 @@ public class Solver : Solver<string[], long>
             if (spelled is not null)
             {
                 digits.Enqueue(spelled.Value);
-                //index += findAt;
-                return ExtractNumber(slice, digits, index + findAt);
+                return ExtractNumber(slice, digits, index + findAt - 1);
             }
 
             return ExtractNumber(slice, digits, ++index);

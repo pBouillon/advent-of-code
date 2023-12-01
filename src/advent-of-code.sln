@@ -5,13 +5,20 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdventOfCode.Commons", "AdventOfCode.Commons\AdventOfCode.Commons.csproj", "{79A796F8-0516-48B6-91DD-00EE788954F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2015", "2015\2015.csproj", "{46790313-CADC-494B-AA08-88538A76EA87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "2015", "2015\2015.csproj", "{46790313-CADC-494B-AA08-88538A76EA87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2022", "2022\2022.csproj", "{3E218B65-3C16-47F7-A288-7EC0EEC71B2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "2022", "2022\2022.csproj", "{3E218B65-3C16-47F7-A288-7EC0EEC71B2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2021", "2021\2021.csproj", "{4B939164-F344-40F9-A6C1-C85DB1ED6396}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "2021", "2021\2021.csproj", "{4B939164-F344-40F9-A6C1-C85DB1ED6396}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2023", "2023\2023.csproj", "{81B90B35-2B54-46D6-A7C1-73483C469B5D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "2023", "2023\2023.csproj", "{81B90B35-2B54-46D6-A7C1-73483C469B5D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{688963DA-C123-4F61-A1A9-F83BB6D48BC2}"
+	ProjectSection(SolutionItems) = preProject
+		..\.gitignore = ..\.gitignore
+		..\.github\workflows\dotnet.yml = ..\.github\workflows\dotnet.yml
+		..\README.md = ..\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
