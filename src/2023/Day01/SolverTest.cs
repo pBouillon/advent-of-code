@@ -19,11 +19,20 @@ public class SolverTest : TestEngine<Solver, string[], long>
 
     public override Puzzle PartTwo => new()
     {
+        ShouldSkipTests = true,
         Example = new Example
         {
-            Input = [""],
-            Result = 0,
+            Input = [
+                "eightwothree",
+                "two1nine",
+                "abcone2threexyz",
+                "xtwone3four",
+                "4nineeightseven2",
+                "zoneight234",
+                "7pqrstsixteen",
+            ],
+            Result = 281,
         },
-        Solution = 1771,
+        Solution = 0,
     };
 }
