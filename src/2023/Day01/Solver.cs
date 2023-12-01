@@ -1,49 +1,29 @@
-﻿namespace _2023.Day01;
+﻿
+namespace _2023.Day01;
 
-public class Solver : Solver<string, int>
+public class Solver : Solver<string[], long>
 {
     public Solver() : base("Day01/input.txt") { }
 
-    public override int PartOne(string input)
+    public override long PartOne(string[] input)
     {
-        static int Recursive(string floors, int current = 0)
+        long GetNumberOf(string slice)
         {
-            if (floors.Length == 0) return current;
+            var digits = slice
+            .Where(c => char.IsDigit(c)).ToList();
 
-            var head = floors[0];
-            var tail = floors[1..];
-
-            return head switch
-            {
-                '(' => Recursive(tail, ++current),
-                ')' => Recursive(tail, --current),
-                _ => throw new Exception($"Unexpected symbol '{head}'")
-            };
+            return long.Parse($"{digits.First()}{digits.Last()}");
         }
 
-        return Recursive(input);
+        return input
+            .Select(GetNumberOf).Sum();
     }
 
-    public override int PartTwo(string input)
+    public override long PartTwo(string[] input)
     {
-        static int Recursive(string floors, int current = 0, int position = 0)
-        {
-            if (current == -1) return position;
-
-            var head = floors[0];
-            var tail = floors[1..];
-
-            return head switch
-            {
-                '(' => Recursive(tail, ++current, ++position),
-                ')' => Recursive(tail, --current, ++position),
-                _ => throw new System.Exception($"Unexpected symbol '{head}'")
-            };
-        }
-
-        return Recursive(input);
+        return 0;
     }
 
-    public override string ParseInput(IEnumerable<string> input)
-        => input.First();
+    public override string[] ParseInput(IEnumerable<string> input)
+        => input.ToArray();
 }
