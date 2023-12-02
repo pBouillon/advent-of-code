@@ -8,7 +8,7 @@ public class Solver : Solver<Game[], long>
 
     public override long PartOne(Game[] games)
     {
-        var setup = new Hand(RedCount: 12, GreenCount: 13, BlueCount: 14);
+        var setup = new SetOfCube(RedCount: 12, GreenCount: 13, BlueCount: 14);
 
         return games
             .Where(game => game.WouldBePossibleWith(setup))
@@ -16,7 +16,9 @@ public class Solver : Solver<Game[], long>
     }
 
     public override long PartTwo(Game[] games)
-        => 0;
+        => games
+            .Select(game => game.MinimalPossibleSet)
+            .Sum(set => set.Power);
 
     public override Game[] ParseInput(IEnumerable<string> input)
         => input.Select(line =>
@@ -29,7 +31,7 @@ public class Solver : Solver<Game[], long>
                 .Single();
 
             var hands = line.Split(';')
-                .Select(Hand.From)
+                .Select(SetOfCube.From)
                 .ToArray();
 
             return new Game(gameId, hands);
@@ -37,9 +39,9 @@ public class Solver : Solver<Game[], long>
         .ToArray();
 }
 
-public record Hand(int RedCount, int GreenCount, int BlueCount)
+public record SetOfCube(int RedCount, int GreenCount, int BlueCount)
 {
-    public static Hand From(string hand)
+    public static SetOfCube From(string hand)
     {
         var redCount = Regex.Match(hand, @"(\d+) red")
                 .Groups
@@ -62,20 +64,32 @@ public record Hand(int RedCount, int GreenCount, int BlueCount)
                 .Skip(1)
                 .FirstOrDefault();
 
-        return new Hand(
+        return new SetOfCube(
             RedCount: redCount,
             GreenCount: greenCount,
             BlueCount: blueCount);
     }
 
-    public bool WouldBePossibleWith(Hand hand)
+    public long Power => RedCount * GreenCount * BlueCount;
+
+    public bool WouldBePossibleWith(SetOfCube hand)
         => RedCount <= hand.RedCount
             && GreenCount <= hand.GreenCount
             && BlueCount <= hand.BlueCount;
 }
 
-public record Game(int Id, Hand[] Hands)
+public record Game(int Id, SetOfCube[] Sets)
 {
-    public bool WouldBePossibleWith(Hand setup)
-        => Hands.All(hand => hand.WouldBePossibleWith(setup));
+    public bool WouldBePossibleWith(SetOfCube setup)
+        => Sets.All(hand => hand.WouldBePossibleWith(setup));
+
+    public SetOfCube MinimalPossibleSet
+        => Sets.Aggregate(
+            new SetOfCube(RedCount: 0, GreenCount: 0, BlueCount: 0),
+            (current, next) => current with
+            {
+                RedCount = Math.Max(next.RedCount, current.RedCount),
+                GreenCount = Math.Max(next.GreenCount, current.GreenCount),
+                BlueCount = Math.Max(next.BlueCount, current.BlueCount)
+            });
 }
