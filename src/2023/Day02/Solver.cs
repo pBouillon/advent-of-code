@@ -7,7 +7,13 @@ public class Solver : Solver<Game[], long>
     public Solver() : base("Day02/input.txt") { }
 
     public override long PartOne(Game[] games)
-        => 0;
+    {
+        var setup = new Hand(RedCount: 12, GreenCount: 13, BlueCount: 14);
+
+        return games
+            .Where(game => game.WouldBePossibleWith(setup))
+            .Sum(game => game.Id);
+    }
 
     public override long PartTwo(Game[] games)
         => 0;
@@ -61,6 +67,15 @@ public record Hand(int RedCount, int GreenCount, int BlueCount)
             GreenCount: greenCount,
             BlueCount: blueCount);
     }
+
+    public bool WouldBePossibleWith(Hand hand)
+        => RedCount <= hand.RedCount
+            && GreenCount <= hand.GreenCount
+            && BlueCount <= hand.BlueCount;
 }
 
-public record Game(int Id, Hand[] Hands);
+public record Game(int Id, Hand[] Hands)
+{
+    public bool WouldBePossibleWith(Hand setup)
+        => Hands.All(hand => hand.WouldBePossibleWith(setup));
+}

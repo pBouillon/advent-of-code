@@ -32,9 +32,9 @@ public class SolverTest : TestEngine<Solver, Game[], long>
                     new Hand(RedCount: 1, GreenCount: 2, BlueCount: 2),
                 ]),
             ],
-            Result = 0,
+            Result = 8,
         },
-        Solution = 0,
+        Solution = 2795,
     };
 
     public override Puzzle PartTwo => new()
