@@ -8,31 +8,71 @@ public class SolverTest : TestEngine<Solver, EngineSchematic, long>
         {
             RawInput = [
                 "467..114..",
-                "...*......", // (1, 3)
+                "...*......", // (3, 1)
                 "..35..633.",
-                "......#...", // (3, 6)
-                "617*......", // (4, 3)
+                "......#...", // (6, 3)
+                "617*......", // (3, 4)
                 ".....+.58.", // (5, 5)
                 "..592.....",
                 "......755.",
-                "...$.*....", // (8, 3), (8, 5)
+                "...$.*....", // (3, 8), (5, 8)
                 ".664.598.."
                 ],
             Input = new EngineSchematic([
-                new(X: 1, Y: 3),
-                new(X: 4, Y: 3),
-                new(X: 8, Y: 3),
-                new(X: 5, Y: 5),
-                new(X: 8, Y: 5),
-                new(X: 3, Y: 6),
+                new Symbol(new(X: 3, Y: 1), '*'),
+                new Symbol(new(X: 6, Y: 3), '#'),
+                new Symbol(new(X: 3, Y: 4), '*'),
+                new Symbol(new(X: 5, Y: 5), '+'),
+                new Symbol(new(X: 3, Y: 8), '$'),
+                new Symbol(new(X: 5, Y: 8), '*'),
             ])
             {
-                PartNumbers = [467, 35, 633, 617, 592, 755, 664, 598],
+                Parts = [
+                    new(new Coordinate(X: 0, Y: 0), Value: 467),
+                    // new(new Coordinate(X: 5, Y: 0), Value: 114),
+                    new(new Coordinate(X: 2, Y: 2), Value: 35),
+                    new(new Coordinate(X: 6, Y: 2), Value: 633),
+                    new(new Coordinate(X: 0, Y: 4), Value: 617),
+                    // new(new Coordinate(X: 7, Y: 5), Value: 58),
+                    new(new Coordinate(X: 2, Y: 6), Value: 592),
+                    new(new Coordinate(X: 6, Y: 7), Value: 755),
+                    new(new Coordinate(X: 1, Y: 9), Value: 664),
+                    new(new Coordinate(X: 5, Y: 9), Value: 598),
+                ],
             },
             Result = 4_361,
         },
         Solution = 556_057,
     };
 
-    public override Puzzle PartTwo => throw new NotImplementedException();
+    public override Puzzle PartTwo => new()
+    {
+        Example = new()
+        {
+            Input = new EngineSchematic([
+                new Symbol(new(X: 3, Y: 1), '*'),
+                new Symbol(new(X: 6, Y: 3), '#'),
+                new Symbol(new(X: 3, Y: 4), '*'),
+                new Symbol(new(X: 5, Y: 5), '+'),
+                new Symbol(new(X: 3, Y: 8), '$'),
+                new Symbol(new(X: 5, Y: 8), '*'),
+            ])
+            {
+                Parts = [
+                    new(new Coordinate(X: 0, Y: 0), Value: 467),
+                    // new(new Coordinate(X: 5, Y: 0), Value: 114),
+                    new(new Coordinate(X: 2, Y: 2), Value: 35),
+                    new(new Coordinate(X: 6, Y: 2), Value: 633),
+                    new(new Coordinate(X: 0, Y: 4), Value: 617),
+                    // new(new Coordinate(X: 7, Y: 5), Value: 58),
+                    new(new Coordinate(X: 2, Y: 6), Value: 592),
+                    new(new Coordinate(X: 6, Y: 7), Value: 755),
+                    new(new Coordinate(X: 1, Y: 9), Value: 664),
+                    new(new Coordinate(X: 5, Y: 9), Value: 598),
+                ],
+            },
+            Result = 467_835,
+        },
+        Solution = 82_824_352,
+    };
 }

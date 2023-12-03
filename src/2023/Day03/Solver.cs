@@ -4,17 +4,15 @@ public class Solver : Solver<EngineSchematic, long>
 {
     public Solver() : base("Day03/input.txt") { }
 
-    public override long PartOne(EngineSchematic input)
-        => input.PartNumbers.Sum();
+    public override long PartOne(EngineSchematic engine)
+        => engine.Parts.Sum(part => part.Value);
 
-    public override long PartTwo(EngineSchematic input)
-    {
-        throw new NotImplementedException();
-    }
+    public override long PartTwo(EngineSchematic engine)
+        => engine.ComputeGears().Sum(gear => gear.Ratio);
 
     public override EngineSchematic ParseInput(IEnumerable<string> input)
     {
-        var symbols = new List<Coordinate>();
+        var symbols = new List<Symbol>();
 
         var rows = input.ToArray();
 
@@ -28,7 +26,7 @@ public class Solver : Solver<EngineSchematic, long>
                 if (!EngineSchematic.IsSymbol(value)) continue;
 
                 var coordinate = new Coordinate(x, y);
-                symbols.Add(coordinate);
+                symbols.Add(new Symbol(coordinate, value));
             }
         }
 
@@ -36,7 +34,7 @@ public class Solver : Solver<EngineSchematic, long>
 
         // Engine Parts Lookup
         Coordinate? partStart;
-        var buffer = string.Empty;
+        string? buffer;
 
         void Reset()
         {
@@ -66,7 +64,6 @@ public class Solver : Solver<EngineSchematic, long>
                     // Create the part
                     var part = new Part(
                         From: partStart,
-                        Length: buffer.Length,
                         Value: long.Parse(buffer));
 
                     engine.EvaluateAndAdd(part);
@@ -91,18 +88,26 @@ public record Coordinate(int X, int Y)
     }
 }
 
+public record Symbol(Coordinate Coordinate, char Value);
 
-public record Part(Coordinate From, int Length, long Value)
+public record Part(Coordinate From, long Value)
 {
-    public bool IsNextToAny(List<Coordinate> coordinates)
-        => Enumerable.Range(0, Length)
+    public Coordinate[] Trail => Enumerable.Range(0, Value.ToString().Length)
             .Select(offset => From with { X = From.X + offset })
-            .Any(coordinate => coordinates.Any(coordinate.IsAdjascentTo));
+            .ToArray();
+
+    public bool IsNextToAny(List<Coordinate> coordinates)
+        => Trail.Any(coordinate => coordinates.Any(coordinate.IsAdjascentTo));
 }
 
-public class EngineSchematic(List<Coordinate> SymbolCoordinates)
+public record Gear(Coordinate Coordinate, Part PartOne, Part PartTwo)
 {
-    public List<long> PartNumbers { get; init; } = new();
+    public long Ratio = PartOne.Value * PartTwo.Value;
+}
+
+public class EngineSchematic(List<Symbol> Symbols)
+{
+    public List<Part> Parts { get; init; } = new();
 
     public static bool MightBePart(char @char)
         => char.IsDigit(@char);
@@ -112,10 +117,31 @@ public class EngineSchematic(List<Coordinate> SymbolCoordinates)
 
     public void EvaluateAndAdd(Part part)
     {
-        var isNextToSymbol = part.IsNextToAny(SymbolCoordinates);
+        var symbolCoordinates = Symbols
+            .Select(symbol => symbol.Coordinate)
+            .ToList();
+
+        var isNextToSymbol = part.IsNextToAny(symbolCoordinates);
         if (isNextToSymbol)
         {
-            PartNumbers.Add(part.Value);
+            Parts.Add(part);
         }
     }
+
+    public Gear[] ComputeGears()
+        => Symbols
+            .Where(symbol => symbol.Value == '*')
+            .Select(gear => new
+            {
+                Symbol = gear,
+                Parts = Parts
+                    .Where(part => part.IsNextToAny([gear.Coordinate]))
+                    .ToArray(),
+            })
+            .Where(candidate => candidate.Parts.Length == 2)
+            .Select(candidate => new Gear(
+                candidate.Symbol.Coordinate,
+                candidate.Parts[0],
+                candidate.Parts[1]))
+            .ToArray();
 }
