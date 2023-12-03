@@ -1,4 +1,6 @@
-﻿namespace _2023.Day03;
+﻿using AdventOfCode.Utils.Matrix;
+
+namespace _2023.Day03;
 
 public class Solver : Solver<EngineSchematic, long>
 {
@@ -38,7 +40,7 @@ public class Solver : Solver<EngineSchematic, long>
 
         void Reset()
         {
-            buffer = string.Empty;
+            buffer = null;
             partStart = null;
         }
 
@@ -64,7 +66,7 @@ public class Solver : Solver<EngineSchematic, long>
                     // Create the part
                     var part = new Part(
                         From: partStart,
-                        Value: long.Parse(buffer));
+                        Value: long.Parse(buffer!));
 
                     engine.EvaluateAndAdd(part);
 
@@ -74,17 +76,6 @@ public class Solver : Solver<EngineSchematic, long>
         }
 
         return engine;
-    }
-}
-
-public record Coordinate(int X, int Y)
-{
-    public bool IsAdjascentTo(Coordinate coordinate)
-    {
-        int deltaX = Math.Abs(coordinate.X - X);
-        int deltaY = Math.Abs(coordinate.Y - Y);
-
-        return deltaX <= 1 && deltaY <= 1;
     }
 }
 

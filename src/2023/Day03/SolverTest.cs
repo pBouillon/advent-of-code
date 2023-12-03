@@ -1,4 +1,6 @@
-﻿namespace _2023.Day03;
+﻿using AdventOfCode.Utils.Matrix;
+
+namespace _2023.Day03;
 
 public class SolverTest : TestEngine<Solver, EngineSchematic, long>
 {
@@ -28,16 +30,16 @@ public class SolverTest : TestEngine<Solver, EngineSchematic, long>
             ])
             {
                 Parts = [
-                    new(new Coordinate(X: 0, Y: 0), Value: 467),
-                    // new(new Coordinate(X: 5, Y: 0), Value: 114),
-                    new(new Coordinate(X: 2, Y: 2), Value: 35),
-                    new(new Coordinate(X: 6, Y: 2), Value: 633),
-                    new(new Coordinate(X: 0, Y: 4), Value: 617),
-                    // new(new Coordinate(X: 7, Y: 5), Value: 58),
-                    new(new Coordinate(X: 2, Y: 6), Value: 592),
-                    new(new Coordinate(X: 6, Y: 7), Value: 755),
-                    new(new Coordinate(X: 1, Y: 9), Value: 664),
-                    new(new Coordinate(X: 5, Y: 9), Value: 598),
+                    new Part(new Coordinate(X: 0, Y: 0), Value: 467),
+                    // new Part(new Coordinate(X: 5, Y: 0), Value: 114),
+                    new Part(new Coordinate(X: 2, Y: 2), Value: 35),
+                    new Part(new Coordinate(X: 6, Y: 2), Value: 633),
+                    new Part(new Coordinate(X: 0, Y: 4), Value: 617),
+                    // new Part(new Coordinate(X: 7, Y: 5), Value: 58),
+                    new Part(new Coordinate(X: 2, Y: 6), Value: 592),
+                    new Part(new Coordinate(X: 6, Y: 7), Value: 755),
+                    new Part(new Coordinate(X: 1, Y: 9), Value: 664),
+                    new Part(new Coordinate(X: 5, Y: 9), Value: 598),
                 ],
             },
             Result = 4_361,
@@ -60,15 +62,15 @@ public class SolverTest : TestEngine<Solver, EngineSchematic, long>
             {
                 Parts = [
                     new(new Coordinate(X: 0, Y: 0), Value: 467),
-                    // new(new Coordinate(X: 5, Y: 0), Value: 114),
-                    new(new Coordinate(X: 2, Y: 2), Value: 35),
-                    new(new Coordinate(X: 6, Y: 2), Value: 633),
-                    new(new Coordinate(X: 0, Y: 4), Value: 617),
-                    // new(new Coordinate(X: 7, Y: 5), Value: 58),
-                    new(new Coordinate(X: 2, Y: 6), Value: 592),
-                    new(new Coordinate(X: 6, Y: 7), Value: 755),
-                    new(new Coordinate(X: 1, Y: 9), Value: 664),
-                    new(new Coordinate(X: 5, Y: 9), Value: 598),
+                    // new Part(new Coordinate(X: 5, Y: 0), Value: 114),
+                    new Part(new Coordinate(X: 2, Y: 2), Value: 35),
+                    new Part(new Coordinate(X: 6, Y: 2), Value: 633),
+                    new Part(new Coordinate(X: 0, Y: 4), Value: 617),
+                    // new Part(new Coordinate(X: 7, Y: 5), Value: 58),
+                    new Part(new Coordinate(X: 2, Y: 6), Value: 592),
+                    new Part(new Coordinate(X: 6, Y: 7), Value: 755),
+                    new Part(new Coordinate(X: 1, Y: 9), Value: 664),
+                    new Part(new Coordinate(X: 5, Y: 9), Value: 598),
                 ],
             },
             Result = 467_835,

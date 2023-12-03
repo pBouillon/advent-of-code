@@ -29,6 +29,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\AdventOfCode.Commons\AdventOfCode.Commons.csproj" />
+		<ProjectReference Include="..\AdventOfCode.Utils\AdventOfCode.Utils.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
