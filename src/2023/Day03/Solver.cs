@@ -16,64 +16,49 @@ public class Solver : Solver<EngineSchematic, long>
     {
         var symbols = new List<Symbol>();
 
-        var rows = input.ToArray();
-
-        // Symbols Lookup
-        for (var y = 0; y < rows.Length; ++y)
+        var schematic = input.ParseMatrix((coordinate, value) =>
         {
-            for (var x = 0; x < rows[y].Length; ++x)
+            if (EngineSchematic.IsSymbol(value))
             {
-                var value = rows[y][x];
-
-                if (!EngineSchematic.IsSymbol(value)) continue;
-
-                var coordinate = new Coordinate(x, y);
                 symbols.Add(new Symbol(coordinate, value));
             }
-        }
+        });
 
         var engine = new EngineSchematic(symbols);
 
         // Engine Parts Lookup
-        Coordinate? partStart;
-        string? buffer;
+        Coordinate? partStart = null;
+        var buffer = string.Empty;
 
         void Reset()
         {
-            buffer = null;
+            buffer = string.Empty;
             partStart = null;
         }
 
-        for (var y = 0; y < rows.Length; ++y)
+        schematic.TraverseMatrix((coordinate, value) =>
         {
-            Reset();
-
-            for (var x = 0; x < rows[y].Length; ++x)
+            // Reading an engine part
+            if (EngineSchematic.MightBePart(value))
             {
-                var value = rows[y][x];
-
-                // Reading an engine part
-                if (EngineSchematic.MightBePart(value))
-                {
-                    partStart ??= new Coordinate(x, y);
-                    buffer += value;
-                    continue;
-                }
-
-                // Finished reading an engine part
-                if (partStart is not null)
-                {
-                    // Create the part
-                    var part = new Part(
-                        From: partStart,
-                        Value: long.Parse(buffer!));
-
-                    engine.EvaluateAndAdd(part);
-
-                    Reset();
-                }
+                partStart ??= coordinate;
+                buffer += value;
+                return;
             }
-        }
+
+            // Finished reading an engine part
+            if (partStart is not null)
+            {
+                // Create the part
+                var part = new Part(
+                    From: partStart,
+                    Value: long.Parse(buffer));
+
+                engine.EvaluateAndAdd(part);
+
+                Reset();
+            }
+        }, onNewRow: Reset);
 
         return engine;
     }
@@ -98,7 +83,7 @@ public record Gear(Coordinate Coordinate, Part PartOne, Part PartTwo)
 
 public class EngineSchematic(List<Symbol> Symbols)
 {
-    public List<Part> Parts { get; init; } = new();
+    public List<Part> Parts { get; init; } = [];
 
     public static bool MightBePart(char @char)
         => char.IsDigit(@char);

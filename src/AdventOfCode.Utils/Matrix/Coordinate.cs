@@ -15,13 +15,6 @@ public enum Direction
 
 public record Coordinate(int X, int Y)
 {
-    public Coordinate[] Neighbors = [
-        new Coordinate(X - 1, Y),
-        new Coordinate(X + 1, Y),
-        new Coordinate(X, Y - 1),
-        new Coordinate(X, Y + 1),
-    ];
-
     public Coordinate MovedToThe(Direction direction)
         => direction switch
         {
@@ -40,6 +33,13 @@ public record Coordinate(int X, int Y)
             _ => throw new Exception($"Unknown direction {direction}")
         };
 
+    public Coordinate[] GetNeighbors => [
+        new Coordinate(X - 1, Y),
+        new Coordinate(X + 1, Y),
+        new Coordinate(X, Y - 1),
+        new Coordinate(X, Y + 1),
+    ];
+
     public bool IsAdjascentTo(Coordinate coordinate)
     {
         int deltaX = Math.Abs(coordinate.X - X);
@@ -47,7 +47,4 @@ public record Coordinate(int X, int Y)
 
         return deltaX <= 1 && deltaY <= 1;
     }
-
-    public override string ToString()
-        => $"X: {X}, Y: {Y}";
 }
