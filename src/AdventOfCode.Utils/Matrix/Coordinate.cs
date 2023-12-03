@@ -36,6 +36,8 @@ public record Coordinate(int X, int Y)
             Direction.UpLeft => this with { X = X - 1, Y = Y + 1 },
             Direction.DownRight => this with { X = X + 1, Y = Y - 1 },
             Direction.DownLeft => this with { X = X - 1, Y = Y - 1 },
+
+            _ => throw new Exception($"Unknown direction {direction}")
         };
 
     public bool IsAdjascentTo(Coordinate coordinate)
