@@ -12,28 +12,42 @@ public class Solver : Solver<ScratchCard[], long>
 
     public override long PartTwo(ScratchCard[] input)
     {
-        var cards = input.ToDictionary(card => card.Id);
+        var gainsOf = input.ToDictionary(
+            card => card.Id,
+            card => card.MatchingNumbers);
 
-        var toProcess = new Queue<ScratchCard>();
-        foreach (var card in input)
+        var cache = new Dictionary<int, int>();
+
+        int ComputeWonCardsFor(int cardId)
         {
-            toProcess.Enqueue(card);
+            if (cache.TryGetValue(cardId, out var cached))
+            {
+                return cached;
+            }
+
+            var matchingNumbers = gainsOf[cardId];
+            if (matchingNumbers == 0)
+            {
+                cache[cardId] = 0;
+                return 0;
+            }
+
+            var gain = matchingNumbers
+                + Enumerable
+                    .Range(0, matchingNumbers)
+                    .Sum(offset => ComputeWonCardsFor(cardId + offset + 1));
+
+            cache[cardId] = gain;
+            return gain;
         }
 
-        var processed = 0;
-        while (toProcess.Count > 0)
-        {
-            var card = toProcess.Dequeue();
-
-            Enumerable.Range(card.Id, card.MatchingNumbers)
-                .Select(id => cards[id + 1])
-                .ToList()
-                .ForEach(toProcess.Enqueue);
-         
-            ++processed;
-        }
-
-        return processed;
+        return input.Aggregate(
+            seed: 0,
+            (count, card) => count
+                // The card itself
+                + 1
+                // The cards it will make we earn
+                + ComputeWonCardsFor(card.Id));
     }
 
     public override ScratchCard[] ParseInput(IEnumerable<string> input)
@@ -48,13 +62,7 @@ public class Solver : Solver<ScratchCard[], long>
                 var numbersIndex = card.LastIndexOf(':') + 1;
                 var rawNumbers = card[(numbersIndex + 1)..].Split('|');
 
-                var scratchedNumbers = rawNumbers[1]
-                    .Split(' ')
-                    .Where(x => x.Length > 0)
-                    .Select(int.Parse)
-                    .ToArray();
-
-                var winningNumbers = rawNumbers[0]
+                static int[] numbersOf(string raw) => raw
                     .Split(' ')
                     .Where(x => x.Length > 0)
                     .Select(int.Parse)
@@ -63,8 +71,8 @@ public class Solver : Solver<ScratchCard[], long>
                 return new ScratchCard
                 {
                     Id = int.Parse(cardId),
-                    ScratchedNumbers = scratchedNumbers,
-                    WinningNumbers = winningNumbers,
+                    ScratchedNumbers = numbersOf(rawNumbers[1]),
+                    WinningNumbers = numbersOf(rawNumbers[0]),
                 };
             })
             .ToArray();
