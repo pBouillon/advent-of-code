@@ -7,7 +7,7 @@
 
 | Year | Solutions | Earned Stars |
 |:----:|:---------:|:------------:|
-| [2023](https://adventofcode.com/2023) | [C#](./src/2023) | **6⭐** |
+| [2023](https://adventofcode.com/2023) | [C#](./src/2023) | **8⭐** |
 | [2022](https://adventofcode.com/2022) | [C#](./src/2022) | **28⭐** |
 | [2021](https://adventofcode.com/2021) | [C#](./src/2021) | **30⭐** |
 | [2020](https://adventofcode.com/2020) | [C#](./src/2020) |  **2⭐** |
