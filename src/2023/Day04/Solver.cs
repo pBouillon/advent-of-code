@@ -12,7 +12,28 @@ public class Solver : Solver<ScratchCard[], long>
 
     public override long PartTwo(ScratchCard[] input)
     {
-        throw new NotImplementedException();
+        var cards = input.ToDictionary(card => card.Id);
+
+        var toProcess = new Queue<ScratchCard>();
+        foreach (var card in input)
+        {
+            toProcess.Enqueue(card);
+        }
+
+        var processed = 0;
+        while (toProcess.Count > 0)
+        {
+            var card = toProcess.Dequeue();
+
+            Enumerable.Range(card.Id, card.MatchingNumbers)
+                .Select(id => cards[id + 1])
+                .ToList()
+                .ForEach(toProcess.Enqueue);
+         
+            ++processed;
+        }
+
+        return processed;
     }
 
     public override ScratchCard[] ParseInput(IEnumerable<string> input)
@@ -55,7 +76,7 @@ public class ScratchCard
     public required IReadOnlyList<int> ScratchedNumbers { get; init; } = [];
     public required IReadOnlyList<int> WinningNumbers { get; init; } = [];
 
-    public long Points => (long)Math.Pow(
-        2,
-        ScratchedNumbers.Intersect(WinningNumbers).Count() - 1);
+    public int MatchingNumbers => ScratchedNumbers.Intersect(WinningNumbers).Count();
+
+    public long Points => (long)Math.Pow(2, MatchingNumbers - 1);
 }
