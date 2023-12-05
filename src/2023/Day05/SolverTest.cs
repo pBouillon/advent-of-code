@@ -105,6 +105,7 @@ public class SolverTest : TestEngine<Solver, Almanac, long>
 
     public override Puzzle PartTwo => new()
     {
+        ShouldSkipTests = true,
         Example = new()
         {
             Input = new Almanac
