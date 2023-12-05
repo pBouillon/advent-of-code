@@ -11,29 +11,33 @@ public class Solver : Solver<Almanac, long>
 
     public override long PartOne(Almanac almanac)
     {
-        long GetLocationOfSeed(long seed)
-        {
-            var soil = almanac.SeedToSoilMap.Translate(seed);
-            var fertilizer = almanac.SoilToFertilizerMap.Translate(soil);
-            var water = almanac.FertilizerToWaterMap.Translate(fertilizer);
-            var light = almanac.WaterToLightMap.Translate(water);
-            var temperature = almanac.LightToTemperatureMap.Translate(light);
-            var humidity = almanac.TemperatureToHumidityMap.Translate(temperature);
-            var location = almanac.HumidityToLocationMap.Translate(humidity);
-
-            return location;
-        }
-
         var seedLocations = almanac.SeedsToPlant.ToDictionary(
             seed => seed,
-            GetLocationOfSeed);
+            almanac.GetLocationOfSeed);
 
         return seedLocations.Values.Min();
     }
 
     public override long PartTwo(Almanac almanac)
     {
-        throw new NotImplementedException();
+        var seedRanges = almanac.SeedsToPlant.Zip(
+            almanac.SeedsToPlant.Skip(1),
+            (a, b) => (a, b));
+
+        var lowestLocation = long.MaxValue;
+
+        foreach (var range in seedRanges)
+        {
+            var (start, length) = range;
+            for (var i = 0; i < length; ++i)
+            {
+                var seed = start + i;
+                var location = almanac.GetLocationOfSeed(seed);
+                lowestLocation = Math.Min(lowestLocation, location);
+            }
+        }
+
+        return lowestLocation;
     }
 
     public override Almanac ParseInput(IEnumerable<string> input)
@@ -121,6 +125,18 @@ public class Almanac
     public required AlmanacMap LightToTemperatureMap { get; init; }
     public required AlmanacMap TemperatureToHumidityMap { get; init; }
     public required AlmanacMap HumidityToLocationMap { get; init; }
+    public long GetLocationOfSeed(long seed)
+    {
+        var soil = SeedToSoilMap.Translate(seed);
+        var fertilizer = SoilToFertilizerMap.Translate(soil);
+        var water = FertilizerToWaterMap.Translate(fertilizer);
+        var light = WaterToLightMap.Translate(water);
+        var temperature = LightToTemperatureMap.Translate(light);
+        var humidity = TemperatureToHumidityMap.Translate(temperature);
+        var location = HumidityToLocationMap.Translate(humidity);
+
+        return location;
+    }
 }
 
 public class AlmanacMap
