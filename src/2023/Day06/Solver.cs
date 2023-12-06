@@ -9,8 +9,25 @@ public class Solver : Solver<Race[], long>
 
     public override long PartOne(Race[] races)
     {
-        throw new NotImplementedException();
+        var count = 1;
+        foreach (var race in races)
+        {
+            var waysToWin = Enumerable.Range(0, race.Time)
+                .Select((holdTime) => holdTime * (race.Time - holdTime))
+                .Where(distance => distance > race.BestDistance)
+                .ToArray();
+
+            count *= waysToWin.Length;
+        }
+        return count;
     }
+    //=> races.Aggregate(
+    //        seed: 1,
+    //        (curr, race) => Enumerable
+    //            .Range(0, race.Time)
+    //            .Select((holdTime) => holdTime * (race.Time - holdTime))
+    //            .Where(distance => distance > race.BestDistance)
+    //            .Count());
 
     public override long PartTwo(Race[] races)
     {
