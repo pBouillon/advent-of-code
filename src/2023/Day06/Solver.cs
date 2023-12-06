@@ -10,11 +10,8 @@ public class Solver : Solver<Race[], long>
 
     public override long PartOne(Race[] races)
         => races.Aggregate(
-            seed: 1,
-            (curr, race) => curr *= Enumerable.Range(0, (int)race.Time)
-                .SkipWhile(holdTime => !race.BeatBestTimeWithPressedFor(holdTime))
-                .TakeWhile(holdTime => race.BeatBestTimeWithPressedFor(holdTime))
-                .Count());
+            seed: 1L,
+            (curr, race) => curr *= race.GetPossibleWinningSolutionsCount());
 
     public override long PartTwo(Race[] races)
     {
@@ -25,12 +22,7 @@ public class Solver : Solver<Race[], long>
             Time: long.Parse(string.Join("", allTimes)),
             BestDistance: long.Parse(string.Join("", allDistances)));
 
-        var (x1, x2) = longerRace.Roots();
-
-        x1 = Math.Floor(x1 + 1) ;
-        x2 = Math.Ceiling(x2 - 1);
-
-        return (long)(x2 - x1) + 1;
+        return longerRace.GetPossibleWinningSolutionsCount();
     }
 
     public override Race[] ParseInput(IEnumerable<string> input)
@@ -55,10 +47,7 @@ public class Solver : Solver<Race[], long>
 
 public record Race(long Time, long BestDistance)
 {
-    public bool BeatBestTimeWithPressedFor(long holdTime)
-        => (holdTime * (Time - holdTime)) > BestDistance;
-
-    public (double, double) Roots()
+    private (double, double) Roots()
     {
         var a = -1;
         var b = Time;
@@ -70,5 +59,15 @@ public record Race(long Time, long BestDistance)
         var x2 = (-b - Math.Sqrt(delta)) / 2 * a;
 
         return (x1, x2);
+    }
+
+    public long GetPossibleWinningSolutionsCount()
+    {
+        var (x1, x2) = Roots();
+
+        x1 = Math.Floor(x1 + 1);
+        x2 = Math.Ceiling(x2 - 1);
+
+        return (long)(x2 - x1) + 1;
     }
 }
