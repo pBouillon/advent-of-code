@@ -17,9 +17,21 @@ public class SolverTest : TestEngine<Solver, Race[], long>
           ],
           Result = 288,
         },
-        Solution = 0,
+        Solution = 316_800,
     };
 
-    public override Puzzle PartTwo => throw new NotImplementedException();
+    public override Puzzle PartTwo => new()
+    {
+        Example = new()
+        {
+            Input = [
+                new Race(Time: 7, BestDistance: 9),
+                new Race(Time: 15, BestDistance: 40),
+                new Race(Time: 30, BestDistance: 200),
+            ],
+            Result = 71_503,
+        },
+        Solution = 0,  // Wrong solution: 45_647_653
+    };
 }
 

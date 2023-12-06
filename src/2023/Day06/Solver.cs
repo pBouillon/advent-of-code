@@ -1,4 +1,5 @@
 ﻿
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 namespace _2023.Day06;
@@ -8,31 +9,49 @@ public class Solver : Solver<Race[], long>
     public Solver() : base("Day06/input.txt") { }
 
     public override long PartOne(Race[] races)
-    {
-        var count = 1;
-        foreach (var race in races)
-        {
-            var waysToWin = Enumerable.Range(0, race.Time)
-                .Select((holdTime) => holdTime * (race.Time - holdTime))
-                .Where(distance => distance > race.BestDistance)
-                .ToArray();
-
-            count *= waysToWin.Length;
-        }
-        return count;
-    }
-    //=> races.Aggregate(
-    //        seed: 1,
-    //        (curr, race) => Enumerable
-    //            .Range(0, race.Time)
-    //            .Select((holdTime) => holdTime * (race.Time - holdTime))
-    //            .Where(distance => distance > race.BestDistance)
-    //            .Count());
+        => races.Aggregate(
+            seed: 1,
+            (curr, race) => curr *= Enumerable.Range(0, (int)race.Time)
+                .SkipWhile(holdTime => !race.BeatBestTimeWithPressedFor(holdTime))
+                .TakeWhile(holdTime => race.BeatBestTimeWithPressedFor(holdTime))
+                .Count());
 
     public override long PartTwo(Race[] races)
     {
-        throw new NotImplementedException();
+        var allTimes = races.Select(race => race.Time.ToString());
+        var allDistances = races.Select(race => race.BestDistance.ToString());
+
+        var longerRace = new Race(
+            Time: long.Parse(string.Join("", allTimes)),
+            BestDistance: long.Parse(string.Join("", allDistances)));
+
+        var waysToWinCount = 1;
+
+        for (var holdTime = 0L; holdTime < longerRace.Time / 2; ++holdTime)
+        {
+            var isWinFromTheBeginning = longerRace.BeatBestTimeWithPressedFor(holdTime);
+            if (longerRace.BeatBestTimeWithPressedFor(holdTime))
+            {
+                ++waysToWinCount;
+            }
+
+            var isWinFromTheEnd = longerRace.BeatBestTimeWithPressedFor(longerRace.Time - holdTime);
+            if (longerRace.BeatBestTimeWithPressedFor(longerRace.Time - holdTime))
+            {
+                ++waysToWinCount;
+            }
+
+            var hasAlreadyFoundSolutions = waysToWinCount > 1;
+            var isStillFindingSolutions = isWinFromTheBeginning || isWinFromTheEnd;
+            if (hasAlreadyFoundSolutions && !isStillFindingSolutions)
+            {
+                return waysToWinCount;
+            }
+        }
+
+        return waysToWinCount;
     }
+
     public override Race[] ParseInput(IEnumerable<string> input)
     {
         var document = input.ToArray();
@@ -53,4 +72,8 @@ public class Solver : Solver<Race[], long>
     }
 }
 
-public record Race(int Time, int BestDistance);
+public record Race(long Time, long BestDistance)
+{
+    public bool BeatBestTimeWithPressedFor(long holdTime)
+        => (holdTime * (Time - holdTime)) > BestDistance;
+}
