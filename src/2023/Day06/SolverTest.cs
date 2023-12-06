@@ -31,7 +31,7 @@ public class SolverTest : TestEngine<Solver, Race[], long>
             ],
             Result = 71_503,
         },
-        Solution = 0,  // Wrong solution: 45_647_653
+        Solution = 45_647_654,
     };
 }
 

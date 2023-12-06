@@ -26,33 +26,11 @@ public class Solver : Solver<Race[], long>
             BestDistance: long.Parse(string.Join("", allDistances)));
 
         var (x1, x2) = longerRace.Roots();
-        return (long)Math.Round(x2 - x1);
 
-        //var waysToWinCount = 1;
+        x1 = Math.Floor(x1 + 1) ;
+        x2 = Math.Ceiling(x2 - 1);
 
-        //for (var holdTime = 0L; holdTime < longerRace.Time / 2; ++holdTime)
-        //{
-        //    var isWinFromTheBeginning = longerRace.BeatBestTimeWithPressedFor(holdTime);
-        //    if (longerRace.BeatBestTimeWithPressedFor(holdTime))
-        //    {
-        //        ++waysToWinCount;
-        //    }
-
-        //    var isWinFromTheEnd = longerRace.BeatBestTimeWithPressedFor(longerRace.Time - holdTime);
-        //    if (longerRace.BeatBestTimeWithPressedFor(longerRace.Time - holdTime))
-        //    {
-        //        ++waysToWinCount;
-        //    }
-
-        //    var hasAlreadyFoundSolutions = waysToWinCount > 1;
-        //    var isStillFindingSolutions = isWinFromTheBeginning || isWinFromTheEnd;
-        //    if (hasAlreadyFoundSolutions && !isStillFindingSolutions)
-        //    {
-        //        return waysToWinCount;
-        //    }
-        //}
-
-        //return waysToWinCount;
+        return (long)(x2 - x1) + 1;
     }
 
     public override Race[] ParseInput(IEnumerable<string> input)
