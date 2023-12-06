@@ -25,31 +25,34 @@ public class Solver : Solver<Race[], long>
             Time: long.Parse(string.Join("", allTimes)),
             BestDistance: long.Parse(string.Join("", allDistances)));
 
-        var waysToWinCount = 1;
+        var (x1, x2) = longerRace.Roots();
+        return (long)Math.Round(x2 - x1);
 
-        for (var holdTime = 0L; holdTime < longerRace.Time / 2; ++holdTime)
-        {
-            var isWinFromTheBeginning = longerRace.BeatBestTimeWithPressedFor(holdTime);
-            if (longerRace.BeatBestTimeWithPressedFor(holdTime))
-            {
-                ++waysToWinCount;
-            }
+        //var waysToWinCount = 1;
 
-            var isWinFromTheEnd = longerRace.BeatBestTimeWithPressedFor(longerRace.Time - holdTime);
-            if (longerRace.BeatBestTimeWithPressedFor(longerRace.Time - holdTime))
-            {
-                ++waysToWinCount;
-            }
+        //for (var holdTime = 0L; holdTime < longerRace.Time / 2; ++holdTime)
+        //{
+        //    var isWinFromTheBeginning = longerRace.BeatBestTimeWithPressedFor(holdTime);
+        //    if (longerRace.BeatBestTimeWithPressedFor(holdTime))
+        //    {
+        //        ++waysToWinCount;
+        //    }
 
-            var hasAlreadyFoundSolutions = waysToWinCount > 1;
-            var isStillFindingSolutions = isWinFromTheBeginning || isWinFromTheEnd;
-            if (hasAlreadyFoundSolutions && !isStillFindingSolutions)
-            {
-                return waysToWinCount;
-            }
-        }
+        //    var isWinFromTheEnd = longerRace.BeatBestTimeWithPressedFor(longerRace.Time - holdTime);
+        //    if (longerRace.BeatBestTimeWithPressedFor(longerRace.Time - holdTime))
+        //    {
+        //        ++waysToWinCount;
+        //    }
 
-        return waysToWinCount;
+        //    var hasAlreadyFoundSolutions = waysToWinCount > 1;
+        //    var isStillFindingSolutions = isWinFromTheBeginning || isWinFromTheEnd;
+        //    if (hasAlreadyFoundSolutions && !isStillFindingSolutions)
+        //    {
+        //        return waysToWinCount;
+        //    }
+        //}
+
+        //return waysToWinCount;
     }
 
     public override Race[] ParseInput(IEnumerable<string> input)
@@ -76,4 +79,18 @@ public record Race(long Time, long BestDistance)
 {
     public bool BeatBestTimeWithPressedFor(long holdTime)
         => (holdTime * (Time - holdTime)) > BestDistance;
+
+    public (double, double) Roots()
+    {
+        var a = -1;
+        var b = Time;
+        var c = - BestDistance;
+
+        var delta = Math.Pow(b, 2) - 4 * a * c;
+
+        var x1 = (-b + Math.Sqrt(delta)) / 2 * a;
+        var x2 = (-b - Math.Sqrt(delta)) / 2 * a;
+
+        return (x1, x2);
+    }
 }
