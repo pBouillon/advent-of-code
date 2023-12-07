@@ -25,7 +25,7 @@ public class Solver : Solver<Almanac, long>
             var isKnownSeed = seedRanges.Any(range =>
             {
                 return seed >= range.Start
-                    && seed <= (range.Start + range.Length);
+                    && seed < (range.Start + range.Length);
             });
 
             var knwonHighAnswer = 59_370_573;
