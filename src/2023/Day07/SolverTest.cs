@@ -38,6 +38,6 @@ public class SolverTest : TestEngine<Solver, Hand[], long>
             ],
             Result = 5_905,
         },
-        Solution = 0,
+        Solution = 249_817_836,
     };
 }
