@@ -32,8 +32,8 @@ public class SolverTest : TestEngine<Solver, Image, long>
         Example = new()
         {
             Input = new Image(_rawImage.ParseMatrix()),
-            Result = 0,
+            Result = 82_000_210,
         },
-        Solution = 0,
+        Solution = 692_506_533_832,
     };
 }

@@ -1,7 +1,5 @@
 ﻿using AdventOfCode.Utils.Matrix;
 
-using System.Data.Common;
-
 namespace _2023.Day11;
 
 public class Solver : Solver<Image, long>
@@ -9,41 +7,18 @@ public class Solver : Solver<Image, long>
     public Solver() : base("Day11/input.txt") { }
 
     public override long PartOne(Image image)
-    {
-        var galaxyPairs = Enumerable.Range(1, image.Galaxies.Count)
-            .SelectMany(i => Enumerable.Range(i + 1, image.Galaxies.Count - i), (i, j) => (i, j));
-
-        return galaxyPairs.Aggregate(
-                  seed: 0L,
-                  (acc, pair) =>
-                  {
-                      var (first, second) = pair;
-
-                      var current = image.Galaxies[first];
-                      var other = image.Galaxies[second];
-
-                      var distance = current.ManhathanDistanceTo(other);
-
-                      var expension =
-                          image.ExpendedColumnIndexes.Count(column =>
-                          {
-                              return column > current.X && column < other.X
-                                  || column < current.X && column > other.X;
-                          })
-                          + image.ExpendedRowIndexes.Count(row =>
-                          {
-                              return row > current.Y && row < other.Y
-                                  || row < current.Y && row > other.Y;
-                          });
-
-                      return acc + distance + expension;
-                  });
-    }
+        => image
+            .GetDistanceBetweenGalaxies(expansionWidth: 2)
+            .Aggregate(
+                seed: 0L,
+                (acc, distance) => acc + distance.Value);
 
     public override long PartTwo(Image image)
-    {
-        throw new NotImplementedException();
-    }
+        => image
+            .GetDistanceBetweenGalaxies(expansionWidth: 1_000_000)
+            .Aggregate(
+                seed: 0L,
+                (acc, distance) => acc + distance.Value);
 
     public override Image ParseInput(IEnumerable<string> input)
         => new(input.ParseMatrix());
@@ -89,4 +64,36 @@ public class Image(IDictionary<Coordinate, char> initialImage)
             .Where(group => group.All(coordinate => coordinate.Value != Pixel.Galaxy))
             .Select(group => group.Key)
             .ToArray();
+
+    public IDictionary<(int, int), long> GetDistanceBetweenGalaxies(int expansionWidth)
+    {
+        var galaxyPairs = Enumerable.Range(1, Galaxies.Count)
+            .SelectMany(i => Enumerable.Range(i + 1, Galaxies.Count - i), (i, j) => (i, j));
+
+        return galaxyPairs.ToDictionary(
+            pair => pair,
+            pair =>
+            {
+                var (first, second) = pair;
+
+                var current = Galaxies[first];
+                var other = Galaxies[second];
+
+                var distance = current.ManhathanDistanceTo(other);
+
+                var expandedSpacesCrossed =
+                    ExpendedColumnIndexes.Count(column =>
+                    {
+                        return column > current.X && column < other.X
+                            || column < current.X && column > other.X;
+                    })
+                    + ExpendedRowIndexes.Count(row =>
+                    {
+                        return row > current.Y && row < other.Y
+                            || row < current.Y && row > other.Y;
+                    });
+
+                return distance + expandedSpacesCrossed * (expansionWidth - 1);
+            });
+    }
 }
