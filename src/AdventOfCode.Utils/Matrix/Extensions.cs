@@ -5,7 +5,7 @@ namespace AdventOfCode.Utils.Matrix;
 public static class Extensions
 {
     public static void TraverseMatrix(
-        this ReadOnlyDictionary<Coordinate, char> matrix,
+        this IDictionary<Coordinate, char> matrix,
         Action<Coordinate, char>? onCell = null,
         Action? onNewRow = null)
     {
@@ -71,7 +71,7 @@ public static class Extensions
     /// <returns>
     /// The resulting matrix
     /// </returns>
-    public static ReadOnlyDictionary<Coordinate, char> ParseMatrix(
+    public static IDictionary<Coordinate, char> ParseMatrix(
         this IEnumerable<string> source,
         Action<Coordinate, char>? onCell = null,
         Action? onNewRow = null)

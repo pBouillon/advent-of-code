@@ -33,7 +33,7 @@ public record Coordinate(int X, int Y)
             _ => throw new Exception($"Unknown direction {direction}")
         };
 
-    public Coordinate[] GetNeighbors => [
+    public Coordinate[] Neighbors => [
         new Coordinate(X - 1, Y),
         new Coordinate(X + 1, Y),
         new Coordinate(X, Y - 1),
@@ -47,4 +47,10 @@ public record Coordinate(int X, int Y)
 
         return deltaX <= 1 && deltaY <= 1;
     }
+
+    public long ManhathanDistanceTo(Coordinate coordinate)
+        => Math.Abs(coordinate.X - X) + Math.Abs(coordinate.Y - Y);
+
+    public override string ToString()
+        => $"({X}, {Y})";
 }

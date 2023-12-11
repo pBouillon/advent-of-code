@@ -8,18 +8,6 @@ public class SolverTest : TestEngine<Solver, EngineSchematic, long>
     {
         Example = new()
         {
-            //RawInput = [
-            //    "467..114..",
-            //    "...*......", // (3, 1)
-            //    "..35..633.",
-            //    "......#...", // (6, 3)
-            //    "617*......", // (3, 4)
-            //    ".....+.58.", // (5, 5)
-            //    "..592.....",
-            //    "......755.",
-            //    "...$.*....", // (3, 8), (5, 8)
-            //    ".664.598.."
-            //],
             Input = new EngineSchematic([
                 new Symbol(new(X: 3, Y: 1), '*'),
                 new Symbol(new(X: 6, Y: 3), '#'),
