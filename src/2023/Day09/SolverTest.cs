@@ -32,6 +32,6 @@ public class SolverTest : TestEngine<Solver, Report, long>
             ]),
             Result = 2,
         },
-        Solution = 0,
+        Solution = 1_100,
     };
 }

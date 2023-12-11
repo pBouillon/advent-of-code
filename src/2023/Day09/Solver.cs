@@ -7,12 +7,10 @@ public class Solver : Solver<Report, long>
     public Solver() : base("Day09/input.txt") { }
 
     public override long PartOne(Report input)
-        => input.Histories.Sum(history => history.Predicted);
+        => input.Histories.Sum(history => history.LastPrediction);
 
     public override long PartTwo(Report input)
-    {
-        throw new NotImplementedException();
-    }
+        => input.Histories.Sum(history => history.FirstPrediction);
 
     public override Report ParseInput(IEnumerable<string> input)
     {
@@ -33,7 +31,8 @@ public class History(long[] measures)
 {
     public long[] Measures { get; init; } = measures;
 
-    public readonly long Predicted = ComputePredictedValueFrom(measures);
+    public readonly long LastPrediction = ComputePredictedValueFrom(measures);
+    public readonly long FirstPrediction = ComputePredictedValueFrom(measures.Reverse().ToArray());
 
     private static long ComputePredictedValueFrom(long[] measures)
     {
