@@ -107,10 +107,10 @@ public class Solver : Solver<int[,], int>
 
                 var trees = new
                 {
-                    OnTop = column[..i].Reverse().ToArray(),
+                    OnTop = column[..i].AsEnumerable().Reverse().ToArray(),
                     OnBottom = column[(i + 1)..],
                     OnRight = row[(j + 1)..],
-                    OnLeft = row[..j].Reverse().ToArray(),
+                    OnLeft = row[..j].AsEnumerable().Reverse().ToArray(),
                 };
 
                 var tree = input[i, j];
