@@ -8,8 +8,8 @@ public static partial class Extensions
     private static partial Regex NumberRegex();
 
     public static long[] AsLongArray(this string line)
-        => NumberRegex().Matches(line)
+        => [.. NumberRegex()
+                .Matches(line)
                 .Cast<Match>()
-                .Select(match => long.Parse(match.Value))
-                .ToArray();
+                .Select(match => long.Parse(match.Value))];
 }

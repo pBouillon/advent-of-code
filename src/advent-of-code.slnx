@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="../.gitignore" />
+    <File Path="../README.md" />
+  </Folder>
+  
+  <Project Path="2015/2015.csproj" />
+  <Project Path="2021/2021.csproj" />
+  <Project Path="2022/2022.csproj" />
+  <Project Path="2023/2023.csproj" />
+  <Project Path="2024/2024.csproj" />
+  <Project Path="AdventOfCode.Commons/AdventOfCode.Commons.csproj" />
+  <Project Path="AdventOfCode.Utils/AdventOfCode.Utils.csproj" />
+</Solution>
