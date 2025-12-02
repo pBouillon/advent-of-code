@@ -3,41 +3,32 @@ namespace _2025.Day01;
 public class Solver()
     : Solver<int[], int>("Day01/input.txt")
 {
-    private static int[] TicksFor(int dial, int rotation) 
+    private static int[] TicksFor(int dial, int rotation)
         => [.. Enumerable
             .Range(1, Math.Abs(rotation))
             .Select(tick => (dial + (tick * Math.Sign(rotation)) + 100) % 100)];
 
     public override int PartOne(int[] rotations)
-    {
-        var clickZeroHits = 0;
-
-        var dial = 50;
-        foreach (var rotation in rotations)
-        {
-            dial = TicksFor(dial, rotation)[^1];
-            if (dial == 0) ++clickZeroHits;
-        }
-
-        return clickZeroHits;
-    }
+        => rotations
+            .Aggregate(
+                seed: (Dial: 50, Hits: 0),
+                (dial, rotation) =>
+                {
+                    var next = TicksFor(dial.Dial, rotation)[^1];
+                    return (next, dial.Hits + (next == 0 ? 1 : 0));
+                })
+            .Hits;
 
     public override int PartTwo(int[] rotations)
-    {
-        var pointedAtZeroOccurrences = 0;
-
-        var dial = 50;
-        foreach (var rotation in rotations)
-        {
-            var ticks = TicksFor(dial, rotation);
-            
-            pointedAtZeroOccurrences += ticks.Count(tick => tick == 0);
-
-            dial = TicksFor(dial, rotation)[^1];
-        }
-
-        return pointedAtZeroOccurrences;
-    }
+        => rotations
+            .Aggregate(
+                seed: (Dial: 50, Hits: 0),
+                (dial, rotation) =>
+                {
+                    var ticks = TicksFor(dial.Dial, rotation);
+                    return (ticks[^1], dial.Hits + ticks.Count(0));
+                })
+            .Hits;
 
     public override int[] ParseInput(IEnumerable<string> input)
         => [.. input.Select(rotation =>
