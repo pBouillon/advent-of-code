@@ -33,6 +33,13 @@ public record Coordinate(int X, int Y)
             _ => throw new Exception($"Unknown direction {direction}")
         };
 
+    public Coordinate[] DiagonalNeighbors => [
+        new Coordinate(X - 1, Y - 1),
+        new Coordinate(X - 1, Y + 1),
+        new Coordinate(X + 1, Y - 1),
+        new Coordinate(X + 1, Y + 1),
+    ];
+
     public Coordinate[] Neighbors => [
         new Coordinate(X - 1, Y),
         new Coordinate(X + 1, Y),

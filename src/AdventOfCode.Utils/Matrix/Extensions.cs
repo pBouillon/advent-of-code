@@ -1,6 +1,4 @@
-﻿using System.Collections.ObjectModel;
-
-namespace AdventOfCode.Utils.Matrix;
+﻿namespace AdventOfCode.Utils.Matrix;
 
 public static class Extensions
 {
@@ -95,6 +93,6 @@ public static class Extensions
             }
         }
 
-        return matrix.AsReadOnly();
+        return matrix;
     }
 }
