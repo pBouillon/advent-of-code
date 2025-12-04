@@ -13,13 +13,11 @@ public class Solver()
         {
             if (value == '.') return;
 
-            var neighbors = coordinate.Neighbors
+            var nearestPaperRollsAmount = coordinate.Neighbors
                 .Concat(coordinate.DiagonalNeighbors)
-                .Where(neighbor => matrix.ContainsKey(neighbor))
-                .Where(neighbor => matrix[neighbor] == '@')
-                .ToArray();
+                .Count(neighbor => matrix.ContainsKey(neighbor) && matrix[neighbor] == '@');
 
-            if (neighbors.Length < 4) ++accessiblePaperRolls;
+            if (nearestPaperRollsAmount < 4) ++accessiblePaperRolls;
         });
 
         return accessiblePaperRolls;
@@ -38,13 +36,11 @@ public class Solver()
             {
                 if (value == '.') return;
 
-                var neighbors = coordinate.Neighbors
+                var nearestPaperRollsAmount = coordinate.Neighbors
                     .Concat(coordinate.DiagonalNeighbors)
-                    .Where(neighbor => matrix.ContainsKey(neighbor))
-                    .Where(neighbor => matrix[neighbor] == '@')
-                    .ToArray();
+                    .Count(neighbor => matrix.ContainsKey(neighbor) && matrix[neighbor] == '@');
 
-                if (neighbors.Length < 4)
+                if (nearestPaperRollsAmount < 4)
                 {
                     ++accessiblePaperRollsThisPass;
                     matrix[coordinate] = '.';
@@ -54,7 +50,7 @@ public class Solver()
             accessiblePaperRolls += accessiblePaperRollsThisPass;
             hasAnyPaperRollBeenRemoved = accessiblePaperRollsThisPass > 0;
         }
-        
+
         return accessiblePaperRolls;
     }
 
