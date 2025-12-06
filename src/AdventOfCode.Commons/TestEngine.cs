@@ -1,5 +1,9 @@
 ﻿namespace AdventOfCode.Commons;
 
+public abstract partial class TestEngine<TSolver, TInput> 
+    : TestEngine<TSolver, TInput, string>
+    where TSolver : Solver<TInput, string>, new();
+
 /// <summary>
 /// Test engine for the implemented <typeparamref name="TSolver"/>
 /// </summary>

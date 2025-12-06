@@ -2,6 +2,26 @@
 
 namespace AdventOfCode.Commons;
 
+public abstract class Solver<TInput>
+    : Solver<TInput, string>
+{
+
+    /// <summary>
+    /// Create a new solver with a puzzle input located in a local file
+    /// </summary>
+    /// <param name="inputPath">The path to the file containing the input</param>
+    protected Solver(string inputPath)
+        : base(new LocalPuzzleInputReaderStrategy { InputPath = inputPath }) { }
+
+    /// <summary>
+    /// Create a new solver that will retrieve the puzzle input from the server
+    /// </summary>
+    /// <param name="year">The year of the current challenge</param>
+    /// <param name="day">The day for which the puzzle input is needed</param>
+    protected Solver(int year, int day)
+        : base(new RemotePuzzleInputReaderStrategy { Year = year, Day = day }) { }
+}
+
 /// <summary>
 /// Represent the solver used for a given day
 /// </summary>
@@ -24,7 +44,7 @@ public abstract class Solver<TInput, TResult>
     /// Create a new solver and initialize its puzzle input based on the provided <see cref="IPuzzleInputReaderStrategy"/>
     /// </summary>
     /// <param name="puzzleInputReader">The strategy to use to retriever the puzzle input</param>
-    private Solver(IPuzzleInputReaderStrategy puzzleInputReader)
+    protected Solver(IPuzzleInputReaderStrategy puzzleInputReader)
     {
         PuzzleInput = new Lazy<TInput>(() =>
         {
