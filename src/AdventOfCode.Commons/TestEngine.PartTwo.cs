@@ -6,6 +6,7 @@ namespace AdventOfCode.Commons;
 public abstract partial class TestEngine<TSolver, TInput, TResult>
     where TSolver : Solver<TInput, TResult>, new()
 {
+    [Trait("Part", "Two")]
     [SkippableFact(DisplayName = "Part Two - Parsing")]
     public void PartTwoParsingTest()
     {
@@ -24,6 +25,7 @@ public abstract partial class TestEngine<TSolver, TInput, TResult>
         result.Should().BeEquivalentTo(PartTwo.Example.Input);
     }
 
+    [Trait("Part", "Two")]
     [SkippableFact(DisplayName = "Part Two - Example")]
     public void PartTwoExampleTest()
     {
@@ -39,6 +41,7 @@ public abstract partial class TestEngine<TSolver, TInput, TResult>
         result.Should().Be(PartTwo.Example.Result);
     }
 
+    [Trait("Part", "Two")]
     [SkippableFact(DisplayName = "Part Two - Solution")]
     public void PartTwoSolutionTest()
     {
