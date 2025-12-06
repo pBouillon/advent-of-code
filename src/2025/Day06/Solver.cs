@@ -44,11 +44,10 @@ public class Solver()
         var symbolReducer = (char symbol)
             => (long a, long b) => symbol == '*' ? a * b : a + b;
 
-        var (columns, operators) = input;
-
-        return columns.Select((column, index) =>
+        return input.Columns
+            .Select((column, index) =>
             {
-                var reducer = symbolReducer(operators[index]);
+                var reducer = symbolReducer(input.Operators[index]);
 
                 return column[1..].Aggregate(
                         seed: long.Parse(column[0]),
@@ -60,7 +59,24 @@ public class Solver()
 
     public override string PartTwo((string[][] Columns, char[] Operators) input)
     {
-        throw new NotImplementedException();
+        var symbolReducer = (char symbol)
+            => (long a, long b) => symbol == '*' ? a * b : a + b;
+
+        return input.Columns
+             .Select((column, index) =>
+             {
+                 var reducer = symbolReducer(input.Operators[index]);
+
+                 var decodedNumbers = Enumerable.Range(0, column[0].Length)
+                     .Select(i => long.Parse(string.Concat(column.Select(number => number[i]))))
+                     .ToList();
+
+                 return decodedNumbers[1..].Aggregate(
+                         seed: decodedNumbers[0],
+                         reducer);
+             })
+             .Sum()
+             .ToString();
     }
 }
 
@@ -89,12 +105,13 @@ public class SolverTest
     public override Puzzle PartTwo => PuzzleBuilder
         .FromParsedInput((
             Columns: [
-                ["123", "328", " 51", "64 "],
-                [" 45", "64 ", "387", "23 "],
-                ["  6", "98 ", "215", "314"],
+                ["123", " 45", "  6"],
+                ["328", "64 ", "98 "],
+                [" 51", "387", "215"],
+                ["64 ", "23 ", "314"],
             ],
             Operators: ['*', '+', '*', '+']
         ))
         .ExpectsResult("3263827")
-        .WithTheActualSolutionBeing("0");
+        .WithTheActualSolutionBeing("7450962489289");
 }
