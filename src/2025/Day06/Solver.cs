@@ -6,9 +6,7 @@ public class Solver()
     public override (string[][] Columns, char[] Operators) ParseInput(IEnumerable<string> input)
     {
         var homework = input.ToArray();
-
-        var lineLenght = homework[0].Length;
-
+        var lineLength = homework[0].Length;
         var numbersRows = homework[..^1];
 
         var symbols = homework[^1]
@@ -16,27 +14,24 @@ public class Solver()
             .Where(x => x.Symbol != ' ')
             .ToArray();
 
-        var columns = new List<string[]>();
-
-        for (var symbolIndex = 0; symbolIndex < symbols.Length; ++symbolIndex)
-        {
-            var from = symbols[symbolIndex].PositionInLine;
-
-            var to = symbolIndex + 1 < symbols.Length
-                ? symbols[symbolIndex + 1].PositionInLine - 1
-                : lineLenght;
-
-            var column = new List<string>();
-
-            foreach (var row in numbersRows)
+        var columns = symbols
+            .Select((symbol, symbolIndex) =>
             {
-                column.Add(row[from..to]);
-            }
+                var from = symbol.PositionInLine;
+                var to = symbolIndex + 1 < symbols.Length
+                    ? symbols[symbolIndex + 1].PositionInLine - 1
+                    : lineLength;
 
-            columns.Add([.. column]);
-        }
+                return numbersRows
+                    .Select(row => row[from..to])
+                    .ToArray();
+            })
+            .ToArray();
 
-        return (Columns: [.. columns], Operators: [.. symbols.Select(x => x.Symbol)]);
+        return (
+            Columns: columns,
+            Operators: [.. symbols.Select(x => x.Symbol)]
+        );
     }
 
     public override string PartOne((string[][] Columns, char[] Operators) input)
