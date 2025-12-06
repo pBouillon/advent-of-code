@@ -1,58 +1,71 @@
 namespace _2025.Day06;
 
 public class Solver()
-    : Solver<(long[][] Numbers, string[] Symbols)>("Day06/input.txt")
+    : Solver<(string[][] Columns, char[] Operators)>("Day06/input.txt")
 {
-    public override (long[][] Numbers, string[] Symbols) ParseInput(IEnumerable<string> input)
+    public override (string[][] Columns, char[] Operators) ParseInput(IEnumerable<string> input)
     {
         var homework = input.ToArray();
 
-        var numbers = homework[..^1]
-            .Select(line
-                => line
-                    .Split(' ', StringSplitOptions.RemoveEmptyEntries)
-                    .Select(long.Parse)
-                    .ToArray())
-            .ToArray();
+        var lineLenght = homework[0].Length;
+
+        var numbersRows = homework[..^1];
 
         var symbols = homework[^1]
-            .Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            .Select((@char, index) => (Symbol: @char, PositionInLine: index))
+            .Where(x => x.Symbol != ' ')
+            .ToArray();
 
-        return (Numbers: numbers, Symbols: symbols);
-    }
+        var columns = new List<string[]>();
 
-    public override string PartOne((long[][] Numbers, string[] Symbols) input)
-    {
-        var symbolReducer = (string symbol)
-            => (long a, long b) => symbol == "*" ? a * b : a + b;
-        
-        var (numbers, symbols) = input;
-
-        var grandTotal = 0L;
-        for (var i = 0; i < numbers[0].Length; ++i)
+        for (var symbolIndex = 0; symbolIndex < symbols.Length; ++symbolIndex)
         {
-            var reducer = symbolReducer(symbols[i]);
+            var from = symbols[symbolIndex].PositionInLine;
 
-            var columnTotal = numbers[0][i];
-            for (var j = 1; j < numbers.Length; ++j)
+            var to = symbolIndex + 1 < symbols.Length
+                ? symbols[symbolIndex + 1].PositionInLine - 1
+                : lineLenght;
+
+            var column = new List<string>();
+
+            foreach (var row in numbersRows)
             {
-                columnTotal = reducer(columnTotal, numbers[j][i]);
+                column.Add(row[from..to]);
             }
 
-            grandTotal += columnTotal;
+            columns.Add([.. column]);
         }
 
-        return grandTotal.ToString();
+        return (Columns: [.. columns], Operators: [.. symbols.Select(x => x.Symbol)]);
     }
 
-    public override string PartTwo((long[][] Numbers, string[] Symbols) input)
+    public override string PartOne((string[][] Columns, char[] Operators) input)
+    {
+        var symbolReducer = (char symbol)
+            => (long a, long b) => symbol == '*' ? a * b : a + b;
+
+        var (columns, operators) = input;
+
+        return columns.Select((column, index) =>
+            {
+                var reducer = symbolReducer(operators[index]);
+
+                return column[1..].Aggregate(
+                        seed: long.Parse(column[0]),
+                        (acc, number) => reducer(acc, long.Parse(number)));
+            })
+            .Sum()
+            .ToString();
+    }
+
+    public override string PartTwo((string[][] Columns, char[] Operators) input)
     {
         throw new NotImplementedException();
     }
 }
 
 public class SolverTest
-    : TestEngine<Solver, (long[][] Numbers, string[] Symbols)>
+    : TestEngine<Solver, (string[][] Columns, char[] Operators)>
 {
     public override Puzzle PartOne => PuzzleBuilder
         .FromInput([
@@ -62,25 +75,26 @@ public class SolverTest
             "*   +   *   +  ",
         ])
         .ParsedAs((
-            Numbers: [
-                [123, 328,  51,  64],
-                [ 45,  64, 387,  23],
-                [  6,  98, 215, 314],
+            Columns: [
+                ["123", " 45", "  6"],
+                ["328", "64 ", "98 "],
+                [" 51", "387", "215"],
+                ["64 ", "23 ", "314"],
             ],
-            Symbols: ["*", "+", "*", "+"]
+            Operators: ['*', '+', '*', '+']
         ))
         .ExpectsResult("4277556")
         .WithTheActualSolutionBeing("4405895212738");
 
     public override Puzzle PartTwo => PuzzleBuilder
         .FromParsedInput((
-            Numbers: [
-                [123, 328,  51,  64],
-                [45,   64, 387,  23],
-                [6,    98, 215, 314],
+            Columns: [
+                ["123", "328", " 51", "64 "],
+                [" 45", "64 ", "387", "23 "],
+                ["  6", "98 ", "215", "314"],
             ],
-            Symbols: ["*", "+", "*", "+"]
+            Operators: ['*', '+', '*', '+']
         ))
-        .ExpectsResult("0")
+        .ExpectsResult("3263827")
         .WithTheActualSolutionBeing("0");
 }
