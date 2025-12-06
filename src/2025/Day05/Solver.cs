@@ -37,7 +37,7 @@ public class Solver()
             var reduced = Reduced(ranges);
 
             hasBeenReduced = reduced.Count < ranges.Count;
-            if (reduced.Count < ranges.Count) ranges = reduced;
+            if (hasBeenReduced) ranges = reduced;
         }
 
         var ingredients = input
