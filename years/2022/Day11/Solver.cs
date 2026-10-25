@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace _2022.Day11;
 
@@ -151,7 +150,7 @@ public class Solver : Solver<Monkeys, ulong>
 
         var divider = monkeyDefinitions.Select(MonkeyDivider)
             .Aggregate(
-                1uL, 
+                1uL,
                 (divider, monkeyDivider) => divider * (ulong)monkeyDivider);
 
         // Create the monkeys from the definition and the divider

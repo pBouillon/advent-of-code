@@ -3,12 +3,11 @@ using System.Text;
 
 namespace _2015.Day04;
 
-public class Solver : Solver<string, int>
+public class Solver()
+    : Solver<string, int>("Day04/input.txt")
 {
     private readonly HashAlgorithm _md5 = (HashAlgorithm)CryptoConfig.CreateFromName("MD5")!;
 
-    public Solver() : base("Day04/input.txt") { }
-    
     // From: https://stackoverflow.com/a/11477466/6152689
     private string GetHash(string input)
     {

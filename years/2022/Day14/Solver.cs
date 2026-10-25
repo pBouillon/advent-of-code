@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using System.Text;
+﻿using System.Text;
 
 namespace _2022.Day14;
 
@@ -146,7 +145,7 @@ public class Cave
         // If that tile is blocked, the unit of sand attempts to instead move diagonally one step
         // down and to the right
         var downRight = bellow with { Column = bellow.Column + 1 };
-        
+
         if (IsIntoTheAbyss(downRight)) return null;
 
         return IsBlocked(downRight)
@@ -158,9 +157,9 @@ public class Cave
                 ? _flooredCave[coordinate.Depth, coordinate.Column] != Material.Air
                 : _cave[coordinate.Depth, coordinate.Column] != Material.Air;
 
-        bool IsIntoTheAbyss(Coordinate coordinate) 
+        bool IsIntoTheAbyss(Coordinate coordinate)
             => coordinate.Depth > (floored ? Depth + 2 : Depth)
-            || coordinate.Column < 0 
+            || coordinate.Column < 0
             || coordinate.Column >= (floored
                 ? _floorOffset + Width + _floorOffset
                 : Width);

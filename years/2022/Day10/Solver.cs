@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Text;
 
 namespace _2022.Day10;
@@ -85,7 +84,7 @@ public class Device
         }
 
         _crt.Draw();
-        
+
         _ = Loaded.TryDequeue(out var instruction);
 
         if (instruction is AddxInstruction addx)
@@ -100,7 +99,7 @@ public class Device
 
 public class Solver : Solver<IEnumerable<Instruction>, string>
 {
-    public Solver() : base ("Day10/input.txt") { }
+    public Solver() : base("Day10/input.txt") { }
 
     public override string PartOne(IEnumerable<Instruction> input)
     {

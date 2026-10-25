@@ -1,5 +1,3 @@
-using FluentAssertions;
-
 namespace _2025.Day05;
 
 public class Solver()

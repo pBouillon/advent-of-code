@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace _2022.Day10;
+﻿namespace _2022.Day10;
 
 public class SolverTest : TestEngine<Solver, IEnumerable<Instruction>, string>
 {

@@ -1,6 +1,4 @@
-﻿using _2022.Day11;
-
-namespace _2022.Day12;
+﻿namespace _2022.Day12;
 
 public record Coordinate(int X, int Y);
 
@@ -53,7 +51,7 @@ public class ElevationMap
     public Edge Source
         => _edges.First(edge => edge.IsStartingEdge);
 
-    public Edge Target 
+    public Edge Target
         => _edges.First(edge => edge.IsEndingEdge);
 
     public ElevationMap(IEnumerable<Edge> edges)
@@ -126,9 +124,9 @@ public class ElevationMap
         while (toVisit.Any())
         {
             // Get the closest node and remove it from the ones to visit
-           var next = toVisit
-               .OrderBy(edge => distanceTo[edge.Coordinate])
-               .First();
+            var next = toVisit
+                .OrderBy(edge => distanceTo[edge.Coordinate])
+                .First();
 
             visited.Add(next.Coordinate);
 
@@ -163,7 +161,7 @@ public class ElevationMap
 
 public class Solver : Solver<ElevationMap, int>
 {
-    public Solver() : base ("Day12/input.txt") { }
+    public Solver() : base("Day12/input.txt") { }
 
     public override int PartOne(ElevationMap input)
         => input.FindShortestPathLength(from: input.Source, to: input.Target);

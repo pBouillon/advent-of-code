@@ -4,7 +4,7 @@ using AdventOfCode.Utils.Matrix;
 namespace _2025.Day07;
 
 public class Solver()
-    : Solver<Node<Coordinate>>("Day07/input.txt")
+    : Solver<Node<Coordinate>, string>("Day07/input.txt")
 {
     public override Node<Coordinate> ParseInput(IEnumerable<string> input)
     {
@@ -115,7 +115,7 @@ public class Solver()
 }
 
 public class SolverTest
-    : TestEngine<Solver, Node<Coordinate>>
+    : TestEngine<Solver, Node<Coordinate>, string>
 {
     private readonly string[] _diagram = [
         ".......S.......",

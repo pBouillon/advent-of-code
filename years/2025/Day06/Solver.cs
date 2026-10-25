@@ -1,7 +1,7 @@
 namespace _2025.Day06;
 
 public class Solver()
-    : Solver<(string[][] Columns, char[] Operators)>("Day06/input.txt")
+    : Solver<(string[][] Columns, char[] Operators), string>("Day06/input.txt")
 {
     public override (string[][] Columns, char[] Operators) ParseInput(IEnumerable<string> input)
     {
@@ -76,7 +76,7 @@ public class Solver()
 }
 
 public class SolverTest
-    : TestEngine<Solver, (string[][] Columns, char[] Operators)>
+    : TestEngine<Solver, (string[][] Columns, char[] Operators), string>
 {
     public override Puzzle PartOne => PuzzleBuilder
         .FromInput([

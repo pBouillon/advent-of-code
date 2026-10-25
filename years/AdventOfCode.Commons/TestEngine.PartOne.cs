@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿using Shouldly;
 using Xunit;
 
 namespace AdventOfCode.Commons;
@@ -17,58 +17,55 @@ namespace AdventOfCode.Commons;
 ///
 /// <typeparam name="TResult">
 /// The type of the result of the puzzle
-/// </typeparam> 
+/// </typeparam>
 public abstract partial class TestEngine<TSolver, TInput, TResult>
     where TSolver : Solver<TInput, TResult>, new()
 {
-    [Trait("Part", "One")]
-    [SkippableFact(DisplayName = "Part One - Parsing")]
+    [Fact(DisplayName = "Part One - Parsing")]
     public void PartOneParsingTest()
     {
         var shouldBeSkipped = PartOne.ShouldSkipTests
           || PartOne.Example.RawInput.Length == 0;
 
-        Skip.If(shouldBeSkipped, "Puzzle.ShouldSkipTests has been set to true or no raw input provided, test skipped");
+        Assert.SkipWhen(shouldBeSkipped, "Puzzle.ShouldSkipTests has been set to true or no raw input provided, test skipped");
 
-        // Arrange
-        var input = PartOne.Example.RawInput;
+        // Arrange
+        var input = PartOne.Example.RawInput;
 
-        // Act
-        var result = _solver.ParseInput(input);
+        // Act
+        var result = _solver.ParseInput(input);
 
-        // Assert
-        result.Should().BeEquivalentTo(PartOne.Example.Input);
+        // Assert
+        result.ShouldBeEquivalentTo(PartOne.Example.Input);
     }
 
-    [Trait("Part", "One")]
-    [SkippableFact(DisplayName = "Part One - Example")]
+    [Fact(DisplayName = "Part One - Example")]
     public void PartOneExampleTest()
     {
-        Skip.If(PartOne.ShouldSkipTests, "Puzzle.ShouldSkipTests has been set to true, test skipped");
+        Assert.SkipWhen(PartOne.ShouldSkipTests, "Puzzle.ShouldSkipTests has been set to true, test skipped");
 
-        // Arrange
-        var input = PartOne.Example.Input;
+        // Arrange
+        var input = PartOne.Example.Input;
 
-        // Act
-        var result = _solver.PartOne(input);
+        // Act
+        var result = _solver.PartOne(input);
 
-        // Assert
-        result.Should().Be(PartOne.Example.Result);
+        // Assert
+        result.ShouldBe(PartOne.Example.Result);
     }
 
-    [Trait("Part", "One")]
-    [SkippableFact(DisplayName = "Part One - Solution")]
+    [Fact(DisplayName = "Part One - Solution")]
     public void PartOneSolutionTest()
     {
-        Skip.If(PartOne.ShouldSkipTests, "Puzzle.ShouldSkipTests has been set to true, test skipped");
+        Assert.SkipWhen(PartOne.ShouldSkipTests, "Puzzle.ShouldSkipTests has been set to true, test skipped");
 
-        // Arrange
-        var input = _solver.PuzzleInput;
+        // Arrange
+        var input = GetPuzzleInputOrSkip();
 
-        // Act
-        var result = _solver.PartOne(input.Value);
+        // Act
+        var result = _solver.PartOne(input);
 
-        // Assert
-        result.Should().BeEquivalentTo(PartOne.Solution);
+        // Assert
+        result.ShouldBe(PartOne.Solution);
     }
 }

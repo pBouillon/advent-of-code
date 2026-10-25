@@ -1,9 +1,7 @@
-using FluentAssertions;
-
 namespace _2025.Day09;
 
 public class Solver()
-    : Solver<Coordinate[]>("Day09/input.txt")
+    : Solver<Coordinate[], string>("Day09/input.txt")
 {
     public override Coordinate[] ParseInput(IEnumerable<string> input)
         => [.. input.Select(line =>
@@ -251,7 +249,7 @@ public sealed record Segment(Coordinate From, Coordinate To)
 }
 
 public class SolverTest
-    : TestEngine<Solver, Coordinate[]>
+    : TestEngine<Solver, Coordinate[], string>
 {
     public override Puzzle PartOne => PuzzleBuilder
         .FromInput([

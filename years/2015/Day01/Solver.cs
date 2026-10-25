@@ -1,9 +1,8 @@
 ﻿namespace _2015.Day01;
 
-public class Solver : Solver<string, int>
+public class Solver()
+    : Solver<string, int>(year: 2015, day: 1)
 {
-    public Solver() : base("Day01/input.txt") { }
-
     public override int PartOne(string input)
     {
         static int Recursive(string floors, int current = 0)

@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace _2022.Day06;
+﻿namespace _2022.Day06;
 
 public record Marker(int Index, string Value);
 

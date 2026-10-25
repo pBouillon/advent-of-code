@@ -1,6 +1,4 @@
-﻿
-using System.Diagnostics;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace _2023.Day06;
 
@@ -51,7 +49,7 @@ public record Race(long Time, long BestDistance)
     {
         var a = -1;
         var b = Time;
-        var c = - BestDistance;
+        var c = -BestDistance;
 
         var delta = Math.Pow(b, 2) - 4 * a * c;
 

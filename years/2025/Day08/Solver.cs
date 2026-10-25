@@ -1,11 +1,9 @@
 using System.Diagnostics;
-using System.Linq;
-using Xunit.Abstractions;
 
 namespace _2025.Day08;
 
 public class Solver()
-    : Solver<Coordinate[]>("Day08/input.txt")
+    : Solver<Coordinate[], string>("Day08/input.txt")
 {
     public override Coordinate[] ParseInput(IEnumerable<string> input)
         => [.. input
@@ -127,7 +125,7 @@ public record Coordinate(int X, int Y, int Z)
 }
 
 public class SolverTest
-    : TestEngine<Solver, Coordinate[]>
+    : TestEngine<Solver, Coordinate[], string>
 {
     public override Puzzle PartOne => PuzzleBuilder
         .FromInput([

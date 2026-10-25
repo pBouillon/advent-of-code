@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-
-namespace _2021.Day09;
+﻿namespace _2021.Day09;
 
 public record Coordinate(int X, int Y);
 
