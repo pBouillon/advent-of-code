@@ -1,5 +1,5 @@
 ﻿using AdventOfCode.Utils.Parsing;
-using AdventOfCode.Utils.Array;
+using AdventOfCode.Utils.Sequences;
 
 namespace _2043.Day02;
 
@@ -31,7 +31,7 @@ public class Solver()
 
     private bool IsSafeReport(long[] report)
     {
-        var pairs = report.ToWindowOfSize(2);
+        var pairs = report.SlidingWindows(2);
 
         var sign = Math.Sign(pairs[0][0] - pairs[0][1]);
 

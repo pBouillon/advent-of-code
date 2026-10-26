@@ -47,11 +47,11 @@ public class Solver : Solver<EngineSchematic, long>
             }
 
             // Finished reading an engine part
-            if (partStart is not null)
+            if (partStart is Coordinate from)
             {
                 // Create the part
                 var part = new Part(
-                    From: partStart,
+                    from,
                     Value: long.Parse(buffer));
 
                 engine.EvaluateAndAdd(part);
@@ -73,7 +73,7 @@ public record Part(Coordinate From, long Value)
             .ToArray();
 
     public bool IsNextToAny(List<Coordinate> coordinates)
-        => Trail.Any(coordinate => coordinates.Any(coordinate.IsAdjascentTo));
+        => Trail.Any(coordinate => coordinates.Any(coordinate.IsAdjacentTo));
 }
 
 public record Gear(Coordinate Coordinate, Part PartOne, Part PartTwo)

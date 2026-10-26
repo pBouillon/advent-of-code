@@ -79,7 +79,7 @@ public class Image(IDictionary<Coordinate, char> initialImage)
                 var current = Galaxies[first];
                 var other = Galaxies[second];
 
-                var distance = current.ManhathanDistanceTo(other);
+                var distance = current.ManhattanDistanceTo(other);
 
                 var expandedSpacesCrossed =
                     ExpendedColumnIndexes.Count(column =>
