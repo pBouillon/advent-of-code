@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>_2026</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.MTP" />
+    <PackageReference Include="Shouldly" />
+    <PackageReference Include="xunit.v3" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<Using Include="AdventOfCode.Commons" />
+	</ItemGroup>
+
+	<ItemGroup>
+    <ProjectReference Include="..\AdventOfCode.Commons\AdventOfCode.Commons.csproj" />
+		<ProjectReference Include="..\AdventOfCode.Utils\AdventOfCode.Utils.csproj" />
+	</ItemGroup>
+
+</Project>
