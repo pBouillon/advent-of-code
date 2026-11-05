@@ -1,7 +1,7 @@
 namespace _2025.Day09;
 
 public class Solver()
-    : Solver<Coordinate[], string>("Day09/input.txt")
+    : Solver<Coordinate[], string>(year: 2025, day: 09)
 {
     public override Coordinate[] ParseInput(IEnumerable<string> input)
         => [.. input.Select(line =>
@@ -57,21 +57,24 @@ public class Solver()
             .OrderByDescending(corners => corners.RectangleArea)
             .ToList();
 
+        var doubledShape = enclosingAreaBorders
+            .Select(s => new Segment(
+                new Coordinate(s.From.X * 2, s.From.Y * 2),
+                new Coordinate(s.To.X * 2, s.To.Y * 2)))
+            .ToArray();
+
         foreach (var (corners, area) in possibleCorners)
         {
-            var candidate = new Rectangle(corners.Item1, corners.Item2);
+            var (a, b) = corners;
+            var minX = Math.Min(a.X, b.X); var maxX = Math.Max(a.X, b.X);
+            var minY = Math.Min(a.Y, b.Y); var maxY = Math.Max(a.Y, b.Y);
 
-            var isAnySideIntersecting = candidate
-                .Borders()
-                .Any(border => enclosingAreaBorders.Any(border.IntersectsWith));
+            var anyEdgeInsideTheRectangle = enclosingAreaBorders.Any(edge =>
+                Math.Max(edge.From.X, edge.To.X) > minX && Math.Min(edge.From.X, edge.To.X) < maxX &&
+                Math.Max(edge.From.Y, edge.To.Y) > minY && Math.Min(edge.From.Y, edge.To.Y) < maxY);
+            if (anyEdgeInsideTheRectangle) continue;
 
-            if (isAnySideIntersecting) continue;
-
-            var isAnyPointOutsideOfTheShape = candidate
-                .Borders()
-                .Any(border => border.Points().Any(point => !point.IsWithin(enclosingAreaBorders)));
-
-            if (isAnyPointOutsideOfTheShape) continue;
+            if (!new Coordinate(minX + maxX, minY + maxY).IsWithin(doubledShape)) continue;
 
             return area.ToString();
         }
