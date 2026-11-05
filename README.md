@@ -8,8 +8,8 @@
 
 |                 Year                  |    Solutions     | Earned Stars |
 | :-----------------------------------: | :--------------: | :----------: |
-| [2025](https://adventofcode.com/2026) | [C#](./src/2026) |   **-⭐**    |
-| [2025](https://adventofcode.com/2025) | [C#](./src/2025) |   **16⭐**   |
+| [2025](https://adventofcode.com/2026) | [C#](./src/2026) |   **\_⭐**   |
+| [2025](https://adventofcode.com/2025) | [C#](./src/2025) |   **19⭐**   |
 | [2024](https://adventofcode.com/2024) | [C#](./src/2024) |   **4⭐**    |
 | [2023](https://adventofcode.com/2023) | [C#](./src/2023) |   **17⭐**   |
 | [2022](https://adventofcode.com/2022) | [C#](./src/2022) |   **28⭐**   |
