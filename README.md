@@ -1,6 +1,6 @@
 # 🎄 My solutions for the advent of code puzzles
 
-> This repository has been created from the [Dotnet Advent of Code template](https://github.com/pBouillon/dotnet-advent-of-code-template)
+> This repository has been created from the [Dotnet Advent of Code template](https://codeberg.org/pbouillon/dotnet-advent-of-code-template)
 
 ---
 
@@ -8,7 +8,8 @@
 
 |                 Year                  |    Solutions     | Earned Stars |
 | :-----------------------------------: | :--------------: | :----------: |
-| [2025](https://adventofcode.com/2025) | [C#](./src/2025) |   **16⭐**    |
+| [2025](https://adventofcode.com/2026) | [C#](./src/2026) |   **-⭐**    |
+| [2025](https://adventofcode.com/2025) | [C#](./src/2025) |   **16⭐**   |
 | [2024](https://adventofcode.com/2024) | [C#](./src/2024) |   **4⭐**    |
 | [2023](https://adventofcode.com/2023) | [C#](./src/2023) |   **17⭐**   |
 | [2022](https://adventofcode.com/2022) | [C#](./src/2022) |   **28⭐**   |
